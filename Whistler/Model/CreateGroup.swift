@@ -11,6 +11,7 @@ import TRON
 import SwiftyJSON
 
 class CreateGroup: JSONDecodable {
+    
     required init(json: JSON) throws {
         print("Create group \n", json);
     }

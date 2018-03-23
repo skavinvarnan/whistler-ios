@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		303F7C262062983D00199759 /* ErrorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C252062983D00199759 /* ErrorUtils.swift */; };
+		303F7C2A2062A4F800199759 /* GenericResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C292062A4F800199759 /* GenericResponse.swift */; };
+		303F7C2D2062DE0A00199759 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */; };
+		303F7C302062DE6200199759 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C2F2062DE6200199759 /* ScheduleViewController.swift */; };
+		303F7C322062DFF200199759 /* ScheduleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C312062DFF200199759 /* ScheduleList.swift */; };
 		304EEBCC2060EB1F00DA2317 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBCB2060EB1F00DA2317 /* Utils.swift */; };
 		304EEBCF20610B1B00DA2317 /* TronService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBCE20610B1B00DA2317 /* TronService.swift */; };
 		304EEBD220610D7200DA2317 /* CreateGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBD120610D7200DA2317 /* CreateGroup.swift */; };
@@ -16,7 +21,10 @@
 		304EEBDB2061600000DA2317 /* GroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBDA2061600000DA2317 /* GroupList.swift */; };
 		304EEBDD2061611700DA2317 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBDC2061611700DA2317 /* Models.swift */; };
 		304EEBDF20616FF100DA2317 /* GroupInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBDE20616FF100DA2317 /* GroupInfoViewController.swift */; };
+		30720EB520657BE900388EE2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30720EB420657BE900388EE2 /* SettingsViewController.swift */; };
 		30A4F67920597E1C00726B88 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A4F67820597E1C00726B88 /* SignInViewController.swift */; };
+		30B4F2B22063E38B009992F9 /* PredictionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */; };
+		30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */; };
 		30D765C62048928700E3E06B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D765C52048928700E3E06B /* AppDelegate.swift */; };
 		30D765C82048928700E3E06B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D765C72048928700E3E06B /* ViewController.swift */; };
 		30D765CB2048928700E3E06B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30D765C92048928700E3E06B /* Main.storyboard */; };
@@ -33,6 +41,11 @@
 
 /* Begin PBXFileReference section */
 		300D22D520489C8A005E968B /* Whistler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistler.entitlements; sourceTree = "<group>"; };
+		303F7C252062983D00199759 /* ErrorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorUtils.swift; sourceTree = "<group>"; };
+		303F7C292062A4F800199759 /* GenericResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericResponse.swift; sourceTree = "<group>"; };
+		303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		303F7C2F2062DE6200199759 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		303F7C312062DFF200199759 /* ScheduleList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleList.swift; sourceTree = "<group>"; };
 		304EEBCB2060EB1F00DA2317 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		304EEBCE20610B1B00DA2317 /* TronService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TronService.swift; sourceTree = "<group>"; };
 		304EEBD120610D7200DA2317 /* CreateGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroup.swift; sourceTree = "<group>"; };
@@ -42,7 +55,10 @@
 		304EEBDA2061600000DA2317 /* GroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupList.swift; sourceTree = "<group>"; };
 		304EEBDC2061611700DA2317 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		304EEBDE20616FF100DA2317 /* GroupInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInfoViewController.swift; sourceTree = "<group>"; };
+		30720EB420657BE900388EE2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		30A4F67820597E1C00726B88 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionPopupViewController.swift; sourceTree = "<group>"; };
+		30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBoardResponse.swift; sourceTree = "<group>"; };
 		30D765C22048928700E3E06B /* Whistler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whistler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30D765C52048928700E3E06B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		30D765C72048928700E3E06B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +105,10 @@
 				304EEBD320610D8D00DA2317 /* ServerError.swift */,
 				304EEBDA2061600000DA2317 /* GroupList.swift */,
 				304EEBDC2061611700DA2317 /* Models.swift */,
+				303F7C252062983D00199759 /* ErrorUtils.swift */,
+				303F7C292062A4F800199759 /* GenericResponse.swift */,
+				303F7C312062DFF200199759 /* ScheduleList.swift */,
+				30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -102,6 +122,9 @@
 				30E5FB652060CB6C00587750 /* NewJoinGroupViewController.swift */,
 				304EEBD6206120E700DA2317 /* GroupsViewController.swift */,
 				304EEBDE20616FF100DA2317 /* GroupInfoViewController.swift */,
+				303F7C2F2062DE6200199759 /* ScheduleViewController.swift */,
+				30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */,
+				30720EB420657BE900388EE2 /* SettingsViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -149,6 +172,7 @@
 				30E5FB60206023E700587750 /* PredictionHeaderTableViewCell.swift */,
 				30E5FB632060C99F00587750 /* GroupIconCollectionViewCell.swift */,
 				304EEBD8206124B100DA2317 /* GroupTableViewCell.swift */,
+				303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -328,13 +352,21 @@
 				30E5FB5D206018BA00587750 /* PredictionTableViewCell.swift in Sources */,
 				30E5FB61206023E700587750 /* PredictionHeaderTableViewCell.swift in Sources */,
 				304EEBCC2060EB1F00DA2317 /* Utils.swift in Sources */,
+				303F7C262062983D00199759 /* ErrorUtils.swift in Sources */,
 				30E5FB662060CB6C00587750 /* NewJoinGroupViewController.swift in Sources */,
+				303F7C2D2062DE0A00199759 /* ScheduleTableViewCell.swift in Sources */,
 				30D765C82048928700E3E06B /* ViewController.swift in Sources */,
+				30720EB520657BE900388EE2 /* SettingsViewController.swift in Sources */,
 				304EEBD7206120E700DA2317 /* GroupsViewController.swift in Sources */,
 				304EEBD420610D8D00DA2317 /* ServerError.swift in Sources */,
+				30B4F2B22063E38B009992F9 /* PredictionPopupViewController.swift in Sources */,
+				303F7C322062DFF200199759 /* ScheduleList.swift in Sources */,
 				304EEBD9206124B100DA2317 /* GroupTableViewCell.swift in Sources */,
 				304EEBD220610D7200DA2317 /* CreateGroup.swift in Sources */,
+				30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */,
+				303F7C302062DE6200199759 /* ScheduleViewController.swift in Sources */,
 				30D765C62048928700E3E06B /* AppDelegate.swift in Sources */,
+				303F7C2A2062A4F800199759 /* GenericResponse.swift in Sources */,
 				304EEBDB2061600000DA2317 /* GroupList.swift in Sources */,
 				304EEBDD2061611700DA2317 /* Models.swift in Sources */,
 				304EEBCF20610B1B00DA2317 /* TronService.swift in Sources */,

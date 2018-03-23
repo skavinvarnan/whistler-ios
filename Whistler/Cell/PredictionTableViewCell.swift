@@ -13,6 +13,8 @@ class PredictionTableViewCell: UITableViewCell {
     @IBOutlet weak var over: UILabel!
     @IBOutlet weak var prediction: UILabel!
     @IBOutlet weak var points: UILabel!
+    @IBOutlet weak var runs: UILabel!
+    @IBOutlet weak var predictButton: UIButton!
     
     @IBAction func predictScore(_ sender: UIButton) {
         
@@ -25,7 +27,7 @@ class PredictionTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
 

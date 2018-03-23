@@ -15,21 +15,12 @@ PODS:
   - Firebase/Crash (4.9.0):
     - Firebase/Core
     - FirebaseCrash (= 2.0.2)
-  - Firebase/DynamicLinks (4.9.0):
-    - Firebase/Core
-    - FirebaseDynamicLinks (= 2.3.2)
   - Firebase/Messaging (4.9.0):
     - Firebase/Core
     - FirebaseMessaging (= 2.1.0)
   - Firebase/Performance (4.9.0):
     - Firebase/Core
     - FirebasePerformance (= 1.1.1)
-  - Firebase/RemoteConfig (4.9.0):
-    - Firebase/Core
-    - FirebaseRemoteConfig (= 2.1.2)
-  - FirebaseABTesting (1.0.0):
-    - FirebaseCore (~> 4.0)
-    - Protobuf (~> 3.1)
   - FirebaseAnalytics (4.0.9):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
@@ -47,8 +38,6 @@ PODS:
     - GoogleToolboxForMac/Logger (~> 2.1)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - Protobuf (~> 3.1)
-  - FirebaseDynamicLinks (2.3.2):
-    - FirebaseAnalytics (~> 4.0)
   - FirebaseInstanceID (2.0.9):
     - FirebaseCore (~> 4.0)
   - FirebaseMessaging (2.1.0):
@@ -64,13 +53,6 @@ PODS:
     - GoogleToolboxForMac/Logger (~> 2.1)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.1)
-  - FirebaseRemoteConfig (2.1.2):
-    - FirebaseABTesting (~> 1.0)
-    - FirebaseAnalytics (~> 4.0)
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - Protobuf (~> 3.1)
   - FirebaseSwizzlingUtilities (1.0.0)
   - Google-Mobile-Ads-SDK (7.28.0)
@@ -123,10 +105,8 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Crash
-  - Firebase/DynamicLinks
   - Firebase/Messaging
   - Firebase/Performance
-  - Firebase/RemoteConfig
   - GoogleSignIn
   - MBProgressHUD
   - TRON (~> 4.0)
@@ -136,16 +116,13 @@ SPEC CHECKSUMS:
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
   Firebase: 632216af3ed7f31e3be34776947fdc7546cfb572
-  FirebaseABTesting: d07d0ee833b842d5153549e4c7e2e2cb1c23a3f9
   FirebaseAnalytics: 388b630c15713f5dbf364071f5f3d6077fb52f4e
   FirebaseAuth: aaaf68d5064a6c8fec435758f83a43b8db26ccaa
   FirebaseCore: 3bd047463058fa6b5d312c97502c52e45401cdfb
   FirebaseCrash: cded0fc566c03651aea606a101bc156085f333ca
-  FirebaseDynamicLinks: 38b68641d24e78d0277a9205d988ce22875d5a25
   FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
   FirebaseMessaging: 2bafab2d0f3ab3dfd753101c2c32995c2051b5da
   FirebasePerformance: 4e1f8091e400eaf88505234caef5718313653709
-  FirebaseRemoteConfig: df64ce784a45e9b9d4988030a59da6baede8bdb0
   FirebaseSwizzlingUtilities: f1c49a5a372ac852c853722a5891a0a5e2344a6c
   Google-Mobile-Ads-SDK: 7f9bc0011df363ae5616449de3682a14c4701612
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
@@ -158,6 +135,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   TRON: eafd3cfd30d264f7c775d0ac3a6cc5650bfd603a
 
-PODFILE CHECKSUM: 01f555891c60aa80cc7afbf02724f295c66184a7
+PODFILE CHECKSUM: fb9cd8b7751bd87d34cf4cac91635f55e7a5f8db
 
 COCOAPODS: 1.4.0

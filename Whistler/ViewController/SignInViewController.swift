@@ -10,17 +10,19 @@ import UIKit
 
 import Firebase
 import GoogleSignIn
+import TRON
 
 class SignInViewController: UIViewController, GIDSignInUIDelegate {
 
-    @IBAction func testButtonClicked(_ sender: UIButton) {
-        
-    }
+    @IBOutlet weak var signInButton: GIDSignInButton!
+    var justSignedIn = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         GIDSignIn.sharedInstance().uiDelegate = self
         if (Auth.auth().currentUser != nil) {
             self.getFirebaseAccessToken()
+            self.signInButton.isHidden = true
         } else {
             
         }
@@ -49,9 +51,35 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
     
     func obtainedFirebaseAccessToken(accessToken: String) {
         UserDefaults.standard.set(accessToken, forKey: Constants.UserDefaults.ACCESS_TOKEN)
-        print(Auth.auth().currentUser?.uid)
-        print(UserDefaults.standard.string(forKey: Constants.UserDefaults.ACCESS_TOKEN)!);
-        performSegue(withIdentifier: "openLanding", sender: nil);
+        self.getHappeningMatch()
+    }
+    
+    var happeningMatchs = [Schedule]();
+    
+    func getHappeningMatch() {
+        let request: APIRequest<ScheduleList, ServerError> = TronService.sharedInstance.createRequest(path: "/match/happening_schedule");
+        request.perform(withSuccess: { (response) in
+            if let err = response.error {
+                self.errorApiCall(error: err)
+            } else {
+                for schedule in response.schedules! {
+                    self.happeningMatchs.append(schedule)
+                }
+                self.performSegue(withIdentifier: "openLanding", sender: nil);
+            }
+        }) { (error) in
+            let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "openLanding" {
+            let tbVc = segue.destination as! UITabBarController
+            let nav = tbVc.viewControllers![1] as! UINavigationController
+            let destinationViewController = nav.topViewController as! LiveViewController
+            destinationViewController.happeningMatches = self.happeningMatchs
+        }
     }
     
     func getFirebaseAccessToken() {
@@ -61,8 +89,32 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 self.errorObtainingFirebaseAccessToken(error: error)
                 return;
             }
-            self.obtainedFirebaseAccessToken(accessToken: idToken!)
+            if self.justSignedIn {
+                self.doUserInitStuff(name: currentUser!.displayName!, accessToken: idToken!)
+            } else {
+                self.obtainedFirebaseAccessToken(accessToken: idToken!)
+            }
         }
+    }
+    
+    func doUserInitStuff(name: String, accessToken: String) {
+        UserDefaults.standard.set(accessToken, forKey: Constants.UserDefaults.ACCESS_TOKEN)
+        let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/user/init/\(name)");
+        request.perform(withSuccess: { (response) in
+            if let err = response.error {
+                self.errorApiCall(error: err)
+            } else {
+                print("User init success")
+                self.obtainedFirebaseAccessToken(accessToken: accessToken)
+            }
+        }) { (error) in
+            let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func errorApiCall(error: ErrorModel) {
+        //TODO
     }
     
     func gotCredentials(credentials: AuthCredential) {
@@ -71,6 +123,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 self.errorInGoogleSignIn(error: error)
                 return
             }
+            self.justSignedIn = true;
             self.getFirebaseAccessToken();
         }
     }

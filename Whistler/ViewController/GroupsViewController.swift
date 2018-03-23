@@ -14,7 +14,7 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     @IBOutlet weak var tableView: UITableView!
     
-    var groups:[Group] = [];
+    var groups:[GroupModel] = [];
     var refresher: UIRefreshControl!
     
     override func viewDidLoad() {
@@ -31,12 +31,22 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func fetchGroupsFromServer() {
         let request: APIRequest<GroupList, ServerError> = TronService.sharedInstance.createRequest(path: "/group/list_all_groups");
         request.perform(withSuccess: { (response) in
-            self.groups = response.groups
-            self.tableView.reloadData()
-            self.refresher.endRefreshing()
+            if let err = response.error {
+                self.errorApiCall(error: err)
+            } else {
+                self.groups = response.groups!;
+                self.tableView.reloadData()
+                self.refresher.endRefreshing()
+            }
         }) { (error) in
-            print("Error ", error)
+            let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
+            self.present(alertController, animated: true, completion: nil)
+            self.refresher.endRefreshing()
         }
+    }
+    
+    func errorApiCall(error: ErrorModel) {
+        //TODO: handle case
     }
     
     @objc func populate() {
@@ -69,7 +79,8 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tableView.separatorStyle = .singleLine
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-            noDataLabel.text = "You dont have any groups. Click the + icon to add a new group"
+            noDataLabel.text = "You dont have any groups. \nClick the + icon to add a new group"
+            noDataLabel.numberOfLines = 2;
             noDataLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
             noDataLabel.textAlignment = NSTextAlignment.center
             self.tableView.backgroundView = noDataLabel

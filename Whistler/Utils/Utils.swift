@@ -20,6 +20,7 @@ class Utils: NSObject {
 struct Constants {
     struct UserDefaults {
         static let ACCESS_TOKEN = "ACCESS_TOKEN"
+        static let HAPPENING_MATCHES = "HAPPENING_MATCHES"
     }
     
     struct Tron {
