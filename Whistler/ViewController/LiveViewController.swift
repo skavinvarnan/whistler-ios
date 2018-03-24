@@ -19,6 +19,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     var scoreCardTimer : Timer?
     var updateLabelTimer: Timer?
     var updatedHowManySecondsAgo: Int = 0
+    var refresher: UIRefreshControl!
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var teamShortName: UILabel!
@@ -55,6 +56,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var happeningMatches = [Schedule]()
     var currentMatch: Schedule? = nil;
+    var predictTableData = [PredictPointsTableData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +68,10 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
+        refresher = UIRefreshControl()
+        refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refresher.addTarget(self, action: #selector(fetchPredictPointsTableData), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refresher)
         
         bannerView.delegate = self
         bannerView.adUnitID = "ca-app-pub-7846555754762077/1155629537"
@@ -79,6 +85,30 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.sectionHeaderHeight = 25.0;
         tableView.sectionFooterHeight = 2.0;
         self.fetchScoreBoardFromServer()
+        self.fetchPredictPointsTableData()
+    }
+    
+    @objc func fetchPredictPointsTableData() {
+        let request: APIRequest<PredictPointsTableResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/my_prediction_table/\(currentMatch!.key)");
+        request.perform(withSuccess: { (response) in
+            if let err = response.error {
+                self.errorFetchingScoreCard(error: err)
+            } else {
+                self.populate(predictTableData: response.pointsTableData!)
+                self.tableView.reloadData()
+                self.refresher.endRefreshing()
+            }
+        }) { (error) in
+            self.errorFetchingScoreCard(error: ErrorModel(code: 123, message: "Guessing no internet"))
+            self.refresher.endRefreshing()
+        }
+    }
+    
+    func populate(predictTableData: [PredictPointsTableData]) {
+        self.predictTableData.removeAll()
+        for predictData in predictTableData {
+            self.predictTableData.append(predictData)
+        }
     }
     
     func fetchScoreBoardFromServer() {
@@ -87,7 +117,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let err = response.error {
                 self.errorFetchingScoreCard(error: err)
             } else {
-                self.populate(scoreBoard: response.scoreBoard!);
+                self.populate(scoreBoard: response.scoreBoard!)
             }
         }) { (error) in
             self.errorFetchingScoreCard(error: ErrorModel(code: 123, message: "Guessing no internet"))
@@ -96,6 +126,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func fetchFromTimer() {
         self.fetchScoreBoardFromServer()
+        self.fetchPredictPointsTableData()
     }
     
     func startScoreCardTimer () {
@@ -149,14 +180,6 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func populate(scoreBoard: ScoreBoard) {
         updatedHowManySecondsAgo = 0;
-        if scoreBoard.showRrr {
-            self.rrrLabel.isHidden = false
-            self.rrrData.isHidden = false
-            self.rrrData.text = scoreBoard.rrrData
-        } else {
-            self.rrrLabel.isHidden = true
-            self.rrrData.isHidden = true
-        }
         
         self.updatedSecondsAgo.isHidden = !scoreBoard.showUpdated
         self.teamShortName.text = scoreBoard.teamShortName
@@ -188,7 +211,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.bowlerRuns.text = scoreBoard.bowlerRuns
         self.bowlerWickets.text = scoreBoard.bowlerWickets
         self.bowlerEconomy.text = scoreBoard.bowlerEconomy
-        
+        self.title = scoreBoard.title
     }
     
     func errorFetchingScoreCard(error: ErrorModel) {
@@ -202,19 +225,111 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8;
+        return predictTableData.count;
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "predictionCell", for: indexPath) as! PredictionTableViewCell
-        cell.over.layer.backgroundColor  = UIColor.red.cgColor
-        cell.over.layer.cornerRadius = 5
-        cell.predictButton.addTarget(self, action: #selector(tap), for: UIControlEvents.touchUpInside)
+        let overItem = predictTableData[indexPath.row].over;
+        let runsItem = predictTableData[indexPath.row].runs;
+        let predictedItem = predictTableData[indexPath.row].predicted;
+        let pointsItem = predictTableData[indexPath.row].points;
+        let predictButtonItem = predictTableData[indexPath.row].predictButton;
+        
+        cell.over.layer.backgroundColor = UIColor.init(hex: overItem.colorHex).cgColor
+        cell.over.layer.masksToBounds = true
+        cell.over.layer.cornerRadius = CGFloat(overItem.radius)
+        cell.over.text = overItem.label
+        if !overItem.whiteText {
+            cell.over.textColor = UIColor.black;
+        } else {
+            cell.over.textColor = UIColor.white;
+        }
+        
+        cell.runs.layer.backgroundColor = UIColor.init(hex: runsItem.colorHex).cgColor
+        cell.runs.layer.masksToBounds = true
+        cell.runs.layer.cornerRadius = CGFloat(runsItem.radius)
+        cell.runs.text = runsItem.label
+        if !runsItem.whiteText {
+            cell.runs.textColor = UIColor.black;
+        } else {
+            cell.runs.textColor = UIColor.white;
+        }
+        
+        cell.prediction.layer.backgroundColor = UIColor.init(hex: predictedItem.colorHex).cgColor
+        cell.prediction.layer.masksToBounds = true
+        cell.prediction.layer.cornerRadius = CGFloat(predictedItem.radius)
+        cell.prediction.text = predictedItem.label
+        if !predictedItem.whiteText {
+            cell.prediction.textColor = UIColor.black;
+        } else {
+            cell.prediction.textColor = UIColor.white;
+        }
+        
+        cell.points.layer.backgroundColor = UIColor.init(hex: pointsItem.colorHex).cgColor
+        cell.points.layer.masksToBounds = true
+        cell.points.layer.cornerRadius = CGFloat(pointsItem.radius)
+        cell.points.text = pointsItem.label
+        if !pointsItem.whiteText {
+            cell.points.textColor = UIColor.black;
+        } else {
+            cell.points.textColor = UIColor.white;
+        }
+        
+        cell.predictButton.layer.backgroundColor = UIColor.init(hex: predictButtonItem.colorHex).cgColor
+        cell.predictButton.layer.masksToBounds = true
+        cell.predictButton.layer.cornerRadius = CGFloat(predictButtonItem.radius)
+        cell.predictButton.setTitle(predictButtonItem.label, for: .normal)
+        
+        if predictButtonItem.clickable {
+            cell.predictButton.addTarget(self, action: #selector(predict), for: UIControlEvents.touchUpInside)
+            if let tag = Int(overItem.label) {
+                cell.predictButton.tag = tag
+            } else {
+                cell.predictButton.tag = -1
+            }
+            cell.predictButton.isEnabled = true
+        } else {
+            cell.predictButton.isEnabled = false
+        }
         return cell;
     }
     
-    @objc func tap() {
-        performSegue(withIdentifier: "predict", sender: nil)
+    var overNumberInt = -1;
+    
+    @objc func predict(sender: UIButton) {
+        self.overNumberInt = sender.tag
+        if overNumberInt != -1 {
+            performSegue(withIdentifier: "predict", sender: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "predict" {
+            let vs = segue.destination as! PredictionPopupViewController
+            vs.overNumberInt = self.overNumberInt
+            vs.matchKey = currentMatch!.key
+            vs.playingTeam = "a"
+        }
+    }
+    
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        var numOfSection: NSInteger = 0
+        
+        if predictTableData.count > 0 {
+            self.tableView.backgroundView = nil
+            numOfSection = 1
+            self.tableView.separatorStyle = .singleLine
+        } else {
+            let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+            noDataLabel.text = "Loading..."
+            noDataLabel.numberOfLines = 1;
+            noDataLabel.textColor = UIColor.init(hex: "#2A292B")
+            noDataLabel.textAlignment = NSTextAlignment.center
+            self.tableView.backgroundView = noDataLabel
+            self.tableView.separatorStyle = .none
+        }
+        return numOfSection
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

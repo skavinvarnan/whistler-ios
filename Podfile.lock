@@ -109,6 +109,7 @@ DEPENDENCIES:
   - Firebase/Performance
   - GoogleSignIn
   - MBProgressHUD
+  - MBProgressHUD (~> 1.1.0)
   - TRON (~> 4.0)
 
 SPEC CHECKSUMS:
@@ -135,6 +136,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   TRON: eafd3cfd30d264f7c775d0ac3a6cc5650bfd603a
 
-PODFILE CHECKSUM: fb9cd8b7751bd87d34cf4cac91635f55e7a5f8db
+PODFILE CHECKSUM: 29efbf10b8e02c0ba79d57b023291447a9bef82f
 
 COCOAPODS: 1.4.0

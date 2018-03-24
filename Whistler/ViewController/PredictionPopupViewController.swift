@@ -7,36 +7,76 @@
 //
 
 import UIKit
+import MBProgressHUD
+import TRON
 
 class PredictionPopupViewController: UIViewController {
 
+    var overNumberInt = -1;
+    var matchKey = ""
+    var playingTeam = ""
+    var keyboardVisible = false
+    
     @IBOutlet weak var overNumber: UILabel!
     @IBOutlet weak var predictionTextField: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
+        overNumber.text = String(overNumberInt)
         predictionTextField.frame.size.height = 70
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closePopup))
         view.addGestureRecognizer(tap)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
         predictionTextField.becomeFirstResponder()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+    
+    @objc func closePopup() {
+        if keyboardVisible {
+            dismissKeyboard()
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
 
     @IBAction func predict(_ sender: UIButton) {
-        dismissKeyboard();
-        self.dismiss(animated: true, completion: nil)
+        if (!(predictionTextField.text?.isEmpty)!) {
+            let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.indeterminate
+            loadingNotification.label.text = "Saving"
+            dismissKeyboard()
+
+            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/\(matchKey)/\(playingTeam)/\(overNumber.text!)/\(predictionTextField.text!)");
+            request.perform(withSuccess: { (response) in
+                if let err = response.error {
+                    self.errorSavingPrediction(error: err)
+                    loadingNotification.hide(animated: true)
+                } else {
+                    loadingNotification.hide(animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }) { (error) in
+                loadingNotification.hide(animated: true)
+                self.errorSavingPrediction(error: ErrorModel(code: 123, message: "Guessing no internet"))
+            }
+        }
+    }
+    
+    func errorSavingPrediction(error: ErrorModel) {
+        let alertController = Utils.simpleAlertController(title: "error", message: "more disctiptive mesaage needed");
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        keyboardVisible = true
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y -= 50
@@ -45,6 +85,7 @@ class PredictionPopupViewController: UIViewController {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        keyboardVisible = false
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y != 0 {
                 self.view.frame.origin.y += 50

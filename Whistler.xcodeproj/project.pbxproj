@@ -22,6 +22,7 @@
 		304EEBDD2061611700DA2317 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBDC2061611700DA2317 /* Models.swift */; };
 		304EEBDF20616FF100DA2317 /* GroupInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304EEBDE20616FF100DA2317 /* GroupInfoViewController.swift */; };
 		30720EB520657BE900388EE2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30720EB420657BE900388EE2 /* SettingsViewController.swift */; };
+		30720EB92066391100388EE2 /* PredictPointsTableResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30720EB82066391000388EE2 /* PredictPointsTableResponse.swift */; };
 		30A4F67920597E1C00726B88 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A4F67820597E1C00726B88 /* SignInViewController.swift */; };
 		30B4F2B22063E38B009992F9 /* PredictionPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */; };
 		30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */; };
@@ -56,6 +57,7 @@
 		304EEBDC2061611700DA2317 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		304EEBDE20616FF100DA2317 /* GroupInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInfoViewController.swift; sourceTree = "<group>"; };
 		30720EB420657BE900388EE2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		30720EB82066391000388EE2 /* PredictPointsTableResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictPointsTableResponse.swift; sourceTree = "<group>"; };
 		30A4F67820597E1C00726B88 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionPopupViewController.swift; sourceTree = "<group>"; };
 		30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBoardResponse.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				303F7C292062A4F800199759 /* GenericResponse.swift */,
 				303F7C312062DFF200199759 /* ScheduleList.swift */,
 				30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */,
+				30720EB82066391000388EE2 /* PredictPointsTableResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */,
 				303F7C302062DE6200199759 /* ScheduleViewController.swift in Sources */,
 				30D765C62048928700E3E06B /* AppDelegate.swift in Sources */,
+				30720EB92066391100388EE2 /* PredictPointsTableResponse.swift in Sources */,
 				303F7C2A2062A4F800199759 /* GenericResponse.swift in Sources */,
 				304EEBDB2061600000DA2317 /* GroupList.swift in Sources */,
 				304EEBDD2061611700DA2317 /* Models.swift in Sources */,

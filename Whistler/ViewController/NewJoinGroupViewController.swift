@@ -46,6 +46,54 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
         collectionView.delegate = self;
         collectionView.dataSource = self;
         selectedImage.image = UIImage(named: emoji[selectedEmoji])
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y == 0 {
+                switch (UIDevice.current.screenType.rawValue) {
+                case (UIDevice.ScreenType.iPhones_5_5s_5c_SE.rawValue):
+                    self.view.frame.origin.y -= 210
+                case (UIDevice.ScreenType.iPhones_6_6s_7_8.rawValue):
+                    self.view.frame.origin.y -= 110
+                case (UIDevice.ScreenType.iPhones_6Plus_6sPlus_7Plus_8Plus.rawValue):
+                    self.view.frame.origin.y -= 80
+                case (UIDevice.ScreenType.iPhoneX.rawValue):
+                    self.view.frame.origin.y -= 70
+                default:
+                    self.view.frame.origin.y -= 150
+                }
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y != 0 {
+                switch (UIDevice.current.screenType.rawValue) {
+                case (UIDevice.ScreenType.iPhones_5_5s_5c_SE.rawValue):
+                    self.view.frame.origin.y += 210
+                case (UIDevice.ScreenType.iPhones_6_6s_7_8.rawValue):
+                    self.view.frame.origin.y += 110
+                case (UIDevice.ScreenType.iPhones_6Plus_6sPlus_7Plus_8Plus.rawValue):
+                    self.view.frame.origin.y += 80
+                case (UIDevice.ScreenType.iPhoneX.rawValue):
+                    self.view.frame.origin.y += 70
+                default:
+                    self.view.frame.origin.y += 150
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {

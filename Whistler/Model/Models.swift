@@ -73,6 +73,22 @@ struct ScoreBoard {
     let bowlerRuns: String
     let bowlerWickets: String
     let bowlerEconomy: String
-    let showRrr: Bool
+    let title: String
     let showUpdated: Bool
+}
+
+struct PredictPointsTableData {
+    let over: PredictPointsTableItem
+    let runs: PredictPointsTableItem
+    let predicted: PredictPointsTableItem
+    let points: PredictPointsTableItem
+    let predictButton: PredictPointsTableItem
+}
+
+struct PredictPointsTableItem {
+    let label: String
+    let clickable: Bool
+    let radius: Int
+    let colorHex: String
+    let whiteText: Bool
 }

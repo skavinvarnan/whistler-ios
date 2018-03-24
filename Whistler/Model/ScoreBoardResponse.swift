@@ -45,9 +45,10 @@ class ScoreBoardResponse: JSONDecodable {
             let bowlerRuns = sbJson["bowlerRuns"]!.stringValue
             let bowlerWickets = sbJson["bowlerWickets"]!.stringValue
             let bowlerEconomy = sbJson["bowlerEconomy"]!.stringValue
-            let showRrr = sbJson["showRrr"]!.boolValue
+            let title = sbJson["title"]!.stringValue
             let showUpdated = sbJson["showUpdated"]!.boolValue
-            sb = ScoreBoard(teamShortName: teamShortName, inningsNumber: inningsNumber, runsWickets: runsWickets, overNumber: overNumber, pShipLabel: pShipLabel, pShipData: pShipData, crrLabel: crrLabel, crrData: crrData, rrrLabel: rrrLabel, rrrData: rrrData, matchInfo: matchInfo, batsmanNameOne: batsmanNameOne, batsmanRunsOne: batsmanRunsOne, batsmanBallsOne: batsmanBallsOne, batsman4sOne: batsman4sOne, batsman6sOne: batsman6sOne, batsmanSROne: batsmanSROne, batsmanNameTwo: batsmanNameTwo, batsmanRunsTwo: batsmanRunsTwo, batsmanBallsTwo: batsmanBallsTwo, batsman4sTwo: batsman4sTwo, batsman6sTwo: batsman6sTwo, batsmanSRTwo: batsmanSRTwo, bowlerName: bowlerName, bowlerOver: bowlerOver, bowlerMaiden: bowlerMaiden, bowlerRuns: bowlerRuns, bowlerWickets: bowlerWickets, bowlerEconomy: bowlerEconomy, showRrr: showRrr, showUpdated: showUpdated)
+            
+            sb = ScoreBoard(teamShortName: teamShortName, inningsNumber: inningsNumber, runsWickets: runsWickets, overNumber: overNumber, pShipLabel: pShipLabel, pShipData: pShipData, crrLabel: crrLabel, crrData: crrData, rrrLabel: rrrLabel, rrrData: rrrData, matchInfo: matchInfo, batsmanNameOne: batsmanNameOne, batsmanRunsOne: batsmanRunsOne, batsmanBallsOne: batsmanBallsOne, batsman4sOne: batsman4sOne, batsman6sOne: batsman6sOne, batsmanSROne: batsmanSROne, batsmanNameTwo: batsmanNameTwo, batsmanRunsTwo: batsmanRunsTwo, batsmanBallsTwo: batsmanBallsTwo, batsman4sTwo: batsman4sTwo, batsman6sTwo: batsman6sTwo, batsmanSRTwo: batsmanSRTwo, bowlerName: bowlerName, bowlerOver: bowlerOver, bowlerMaiden: bowlerMaiden, bowlerRuns: bowlerRuns, bowlerWickets: bowlerWickets, bowlerEconomy: bowlerEconomy, title: title, showUpdated: showUpdated)
         }
         self.error = ErrorUtils.createErrorObjectFrom(json: json)
         self.scoreBoard = sb

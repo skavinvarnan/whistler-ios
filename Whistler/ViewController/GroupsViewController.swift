@@ -9,10 +9,13 @@
 import UIKit
 import Firebase
 import TRON
+import MBProgressHUD
 
 class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    
+    var firstLoad = true
     
     var groups:[GroupModel] = [];
     var refresher: UIRefreshControl!
@@ -29,12 +32,21 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func fetchGroupsFromServer() {
+        //let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        if firstLoad {
+          //  loadingNotification.mode = MBProgressHUDMode.indeterminate
+            //loadingNotification.label.text = "Loading"
+        }
         let request: APIRequest<GroupList, ServerError> = TronService.sharedInstance.createRequest(path: "/group/list_all_groups");
         request.perform(withSuccess: { (response) in
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
-                self.groups = response.groups!;
+                if self.firstLoad {
+                    //loadingNotification.hide(animated: true)
+                }
+                self.firstLoad = false
+                self.groups = response.groups!
                 self.tableView.reloadData()
                 self.refresher.endRefreshing()
             }
@@ -79,7 +91,9 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tableView.separatorStyle = .singleLine
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-            noDataLabel.text = "You dont have any groups. \nClick the + icon to add a new group"
+            if !firstLoad {
+                noDataLabel.text = "You dont have any groups. \nClick the + icon to add a new group"
+            }
             noDataLabel.numberOfLines = 2;
             noDataLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
             noDataLabel.textAlignment = NSTextAlignment.center
