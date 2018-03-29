@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		302A3600206D25CD0006B317 /* MatchReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A35FF206D25CD0006B317 /* MatchReportResponse.swift */; };
+		302A3602206D26690006B317 /* UserMatchReportItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A3601206D26690006B317 /* UserMatchReportItemTableViewCell.swift */; };
+		302A3604206D26900006B317 /* UserPredictionReportLastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A3603206D26900006B317 /* UserPredictionReportLastTableViewCell.swift */; };
+		303F5306206BF7F600EBBD60 /* GroupInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5305206BF7F600EBBD60 /* GroupInfoTableViewCell.swift */; };
+		303F5308206BFCCA00EBBD60 /* GroupInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5307206BFCCA00EBBD60 /* GroupInfoResponse.swift */; };
+		303F530A206C004300EBBD60 /* WhistlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5309206C004300EBBD60 /* WhistlerManager.swift */; };
+		303F530E206C092600EBBD60 /* UserPredictionReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F530D206C092600EBBD60 /* UserPredictionReportViewController.swift */; };
+		303F5310206C098B00EBBD60 /* UserMatchsReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F530F206C098B00EBBD60 /* UserMatchsReportViewController.swift */; };
+		303F5312206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5311206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift */; };
+		303F5314206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5313206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift */; };
+		303F5316206C18B400EBBD60 /* UserPredictionItemResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F5315206C18B400EBBD60 /* UserPredictionItemResponse.swift */; };
 		303F7C262062983D00199759 /* ErrorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C252062983D00199759 /* ErrorUtils.swift */; };
 		303F7C2A2062A4F800199759 /* GenericResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C292062A4F800199759 /* GenericResponse.swift */; };
 		303F7C2D2062DE0A00199759 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */; };
@@ -42,6 +53,17 @@
 
 /* Begin PBXFileReference section */
 		300D22D520489C8A005E968B /* Whistler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Whistler.entitlements; sourceTree = "<group>"; };
+		302A35FF206D25CD0006B317 /* MatchReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchReportResponse.swift; sourceTree = "<group>"; };
+		302A3601206D26690006B317 /* UserMatchReportItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchReportItemTableViewCell.swift; sourceTree = "<group>"; };
+		302A3603206D26900006B317 /* UserPredictionReportLastTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPredictionReportLastTableViewCell.swift; sourceTree = "<group>"; };
+		303F5305206BF7F600EBBD60 /* GroupInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInfoTableViewCell.swift; sourceTree = "<group>"; };
+		303F5307206BFCCA00EBBD60 /* GroupInfoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInfoResponse.swift; sourceTree = "<group>"; };
+		303F5309206C004300EBBD60 /* WhistlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhistlerManager.swift; sourceTree = "<group>"; };
+		303F530D206C092600EBBD60 /* UserPredictionReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPredictionReportViewController.swift; sourceTree = "<group>"; };
+		303F530F206C098B00EBBD60 /* UserMatchsReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchsReportViewController.swift; sourceTree = "<group>"; };
+		303F5311206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPredictionReportLastViewController.swift; sourceTree = "<group>"; };
+		303F5313206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPredictionItemTableViewCell.swift; sourceTree = "<group>"; };
+		303F5315206C18B400EBBD60 /* UserPredictionItemResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPredictionItemResponse.swift; sourceTree = "<group>"; };
 		303F7C252062983D00199759 /* ErrorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorUtils.swift; sourceTree = "<group>"; };
 		303F7C292062A4F800199759 /* GenericResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericResponse.swift; sourceTree = "<group>"; };
 		303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
@@ -96,6 +118,7 @@
 			children = (
 				304EEBCB2060EB1F00DA2317 /* Utils.swift */,
 				304EEBCE20610B1B00DA2317 /* TronService.swift */,
+				303F5309206C004300EBBD60 /* WhistlerManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -112,6 +135,9 @@
 				303F7C312062DFF200199759 /* ScheduleList.swift */,
 				30B4F2B420641899009992F9 /* ScoreBoardResponse.swift */,
 				30720EB82066391000388EE2 /* PredictPointsTableResponse.swift */,
+				303F5307206BFCCA00EBBD60 /* GroupInfoResponse.swift */,
+				303F5315206C18B400EBBD60 /* UserPredictionItemResponse.swift */,
+				302A35FF206D25CD0006B317 /* MatchReportResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -128,6 +154,9 @@
 				303F7C2F2062DE6200199759 /* ScheduleViewController.swift */,
 				30B4F2B12063E38B009992F9 /* PredictionPopupViewController.swift */,
 				30720EB420657BE900388EE2 /* SettingsViewController.swift */,
+				303F530D206C092600EBBD60 /* UserPredictionReportViewController.swift */,
+				303F530F206C098B00EBBD60 /* UserMatchsReportViewController.swift */,
+				303F5311206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -176,6 +205,10 @@
 				30E5FB632060C99F00587750 /* GroupIconCollectionViewCell.swift */,
 				304EEBD8206124B100DA2317 /* GroupTableViewCell.swift */,
 				303F7C2C2062DE0A00199759 /* ScheduleTableViewCell.swift */,
+				303F5305206BF7F600EBBD60 /* GroupInfoTableViewCell.swift */,
+				303F5313206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift */,
+				302A3601206D26690006B317 /* UserMatchReportItemTableViewCell.swift */,
+				302A3603206D26900006B317 /* UserPredictionReportLastTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -210,6 +243,7 @@
 				30D765C02048928700E3E06B /* Resources */,
 				FB7D0F38F3FD14981638F941 /* [CP] Embed Pods Frameworks */,
 				135A5F30D63E95389B21A9DE /* [CP] Copy Pods Resources */,
+				308140FA2066C8EB008CF261 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -292,6 +326,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Whistler/Pods-Whistler-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		308140FA2066C8EB008CF261 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
+		};
 		F39CC746CB6C7FB1919BC8E1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -353,27 +401,38 @@
 			files = (
 				304EEBDF20616FF100DA2317 /* GroupInfoViewController.swift in Sources */,
 				30E5FB5D206018BA00587750 /* PredictionTableViewCell.swift in Sources */,
+				303F5310206C098B00EBBD60 /* UserMatchsReportViewController.swift in Sources */,
+				302A3602206D26690006B317 /* UserMatchReportItemTableViewCell.swift in Sources */,
 				30E5FB61206023E700587750 /* PredictionHeaderTableViewCell.swift in Sources */,
 				304EEBCC2060EB1F00DA2317 /* Utils.swift in Sources */,
 				303F7C262062983D00199759 /* ErrorUtils.swift in Sources */,
+				303F5312206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift in Sources */,
 				30E5FB662060CB6C00587750 /* NewJoinGroupViewController.swift in Sources */,
 				303F7C2D2062DE0A00199759 /* ScheduleTableViewCell.swift in Sources */,
 				30D765C82048928700E3E06B /* ViewController.swift in Sources */,
+				303F5316206C18B400EBBD60 /* UserPredictionItemResponse.swift in Sources */,
 				30720EB520657BE900388EE2 /* SettingsViewController.swift in Sources */,
 				304EEBD7206120E700DA2317 /* GroupsViewController.swift in Sources */,
 				304EEBD420610D8D00DA2317 /* ServerError.swift in Sources */,
+				302A3600206D25CD0006B317 /* MatchReportResponse.swift in Sources */,
 				30B4F2B22063E38B009992F9 /* PredictionPopupViewController.swift in Sources */,
 				303F7C322062DFF200199759 /* ScheduleList.swift in Sources */,
 				304EEBD9206124B100DA2317 /* GroupTableViewCell.swift in Sources */,
+				303F5308206BFCCA00EBBD60 /* GroupInfoResponse.swift in Sources */,
+				302A3604206D26900006B317 /* UserPredictionReportLastTableViewCell.swift in Sources */,
 				304EEBD220610D7200DA2317 /* CreateGroup.swift in Sources */,
+				303F5306206BF7F600EBBD60 /* GroupInfoTableViewCell.swift in Sources */,
 				30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */,
+				303F530E206C092600EBBD60 /* UserPredictionReportViewController.swift in Sources */,
 				303F7C302062DE6200199759 /* ScheduleViewController.swift in Sources */,
 				30D765C62048928700E3E06B /* AppDelegate.swift in Sources */,
 				30720EB92066391100388EE2 /* PredictPointsTableResponse.swift in Sources */,
 				303F7C2A2062A4F800199759 /* GenericResponse.swift in Sources */,
 				304EEBDB2061600000DA2317 /* GroupList.swift in Sources */,
+				303F530A206C004300EBBD60 /* WhistlerManager.swift in Sources */,
 				304EEBDD2061611700DA2317 /* Models.swift in Sources */,
 				304EEBCF20610B1B00DA2317 /* TronService.swift in Sources */,
+				303F5314206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift in Sources */,
 				30A4F67920597E1C00726B88 /* SignInViewController.swift in Sources */,
 				30E5FB642060C99F00587750 /* GroupIconCollectionViewCell.swift in Sources */,
 				30E5FB5F20601C4700587750 /* LiveViewController.swift in Sources */,

@@ -19,9 +19,11 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var groups:[GroupModel] = [];
     var refresher: UIRefreshControl!
+    var currentMatch: Schedule?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        currentMatch = WhistlerManager.sharedInstance.currentMatch!
         tableView.delegate = self;
         tableView.dataSource = self;
         refresher = UIRefreshControl()
@@ -115,6 +117,7 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if segue.identifier == "groupInfo" {
             if let destinationViewController = segue.destination as? GroupInfoViewController {
                 destinationViewController.groupObject = groups[selectedGroupRow]
+                destinationViewController.matchKey = currentMatch?.key
             }
         }
     }

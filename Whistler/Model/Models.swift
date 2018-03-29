@@ -92,3 +92,23 @@ struct PredictPointsTableItem {
     let colorHex: String
     let whiteText: Bool
 }
+
+struct GroupInfoItem {
+    let name: String
+    let uid: String
+    let totalForMatch: Int
+    let overAll: Int
+}
+
+struct UserPredictionItem {
+    let over: String
+    let runs: String
+    let predicted: String
+    let points: String
+}
+
+struct MatchReportItem {
+    let match: String
+    let matchKey: String
+    let points: Int
+}

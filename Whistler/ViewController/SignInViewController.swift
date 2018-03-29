@@ -26,7 +26,9 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         } else {
             
         }
+        
     }
+
     
     func signOut() {
         do {
@@ -54,7 +56,6 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         self.getHappeningMatch()
     }
     
-    var happeningMatchs = [Schedule]();
     
     func getHappeningMatch() {
         let request: APIRequest<ScheduleList, ServerError> = TronService.sharedInstance.createRequest(path: "/match/happening_schedule");
@@ -63,9 +64,15 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 self.errorApiCall(error: err)
             } else {
                 for schedule in response.schedules! {
-                    self.happeningMatchs.append(schedule)
+                    WhistlerManager.sharedInstance.happeningMatchs.append(schedule)
                 }
-                self.performSegue(withIdentifier: "openLanding", sender: nil);
+                if WhistlerManager.sharedInstance.happeningMatchs.count == 0 {
+                    let alertController = Utils.simpleAlertController(title: "currently no matches", message: "handle this case");
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[0]
+                    self.performSegue(withIdentifier: "openLanding", sender: nil);
+                }
             }
         }) { (error) in
             let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
@@ -73,14 +80,6 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "openLanding" {
-            let tbVc = segue.destination as! UITabBarController
-            let nav = tbVc.viewControllers![1] as! UINavigationController
-            let destinationViewController = nav.topViewController as! LiveViewController
-            destinationViewController.happeningMatches = self.happeningMatchs
-        }
-    }
     
     func getFirebaseAccessToken() {
         let currentUser = Auth.auth().currentUser

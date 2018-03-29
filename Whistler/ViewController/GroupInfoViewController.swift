@@ -9,16 +9,92 @@
 import UIKit
 import Firebase
 import TRON
+import MBProgressHUD
 
-class GroupInfoViewController: UIViewController {
+class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var groupObject: GroupModel!;
+    var groupIntoItems = [GroupInfoItem]();
+    var matchKey: String?
 
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = groupObject.name
+        tableView.delegate = self
+        tableView.dataSource = self
         print(groupObject!);
         self.populateNavBarIcons();
+        self.getGroupMembers();
+    }
+    
+    func getGroupMembers() {
+        let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.indeterminate
+        loadingNotification.label.text = "Loading"
+        let request: APIRequest<GroupInfoResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/get_everyone_form_group/\(groupObject.id)/\(matchKey!))");
+        request.perform(withSuccess: { (response) in
+            if response.error != nil {
+                self.errorResponse()
+                loadingNotification.hide(animated: true)
+            } else {
+                loadingNotification.hide(animated: true)
+                self.populate(groupInfoItems: response.users!)
+                self.tableView.reloadData()
+            }
+        }) { (error) in
+            loadingNotification.hide(animated: true)
+            self.errorResponse()
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        openingUid = groupIntoItems[indexPath.row].uid
+        openingName = groupIntoItems[indexPath.row].name
+        performSegue(withIdentifier: "openUserPrediction", sender: nil)
+    }
+    var openingUid: String?
+    var openingName: String?
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "openUserPrediction" {
+            let vc = segue.destination as! UserPredictionReportViewController
+            vc.uid = openingUid!
+            vc.matchKey = matchKey!
+            vc.userName = openingName!
+        }
+    }
+    
+    func errorResponse() {
+        let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func populate(groupInfoItems: [GroupInfoItem]) {
+        for group in groupInfoItems {
+            self.groupIntoItems.append(group)
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.groupIntoItems.count
+    }
+
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "groupInfoTableViewCell", for: indexPath) as! GroupInfoTableViewCell
+        let groupItem = self.groupIntoItems[indexPath.row]
+        cell.name.text = groupItem.name
+        cell.current.text = String(groupItem.totalForMatch)
+        cell.overAll.text = String(groupItem.overAll)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let headerCell = tableView.dequeueReusableCell(withIdentifier: "groupInfoHeaderCell")
+        headerView.addSubview(headerCell!)
+        return headerView
     }
     
     func populateNavBarIcons() {

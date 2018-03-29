@@ -10,7 +10,7 @@ import UIKit
 import TRON
 import Alamofire
 
-class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -20,6 +20,8 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
     
     @IBOutlet weak var selectedImage: UIImageView!
     @IBOutlet weak var groupName: UITextField!
+    @IBOutlet weak var groupId: UITextField!
+    @IBOutlet weak var joinCode: UITextField!
     
     @IBAction func createGroupClicked(_ sender: UIButton) {
         
@@ -43,8 +45,12 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self;
-        collectionView.dataSource = self;
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        groupId.delegate = self
+        joinCode.delegate = self
+        groupId.tag = 1
+        joinCode.tag = 2
         selectedImage.image = UIImage(named: emoji[selectedEmoji])
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -52,6 +58,31 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tap)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == 1 {
+            joinCode.becomeFirstResponder()
+            return true
+        } else if textField.tag == 2 {
+            self.joinGroup();
+            return true
+        }
+        return false
+    }
+    
+    @IBAction func joinButtonClicked(_ sender: UIButton) {
+        self.joinGroup()
+    }
+    
+    func joinGroup() {
+        if joinCode.text?.isEmpty ?? true || groupId.text?.isEmpty ?? true {
+            let alertController = Utils.simpleAlertController(title: "Group ID Join code", message: "Please enter your group id and join code. You can get this from group admin")
+            self.present(alertController, animated: true, completion: nil)
+            return;
+        } else {
+            print("join group");
+        }
     }
     
     @objc func hideKeyboard() {

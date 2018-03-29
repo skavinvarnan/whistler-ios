@@ -54,17 +54,11 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var updatedSecondsAgo: UILabel!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    var happeningMatches = [Schedule]()
-    var currentMatch: Schedule? = nil;
     var predictTableData = [PredictPointsTableData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if happeningMatches.count > 0 {
-            currentMatch = happeningMatches[0];
-        } else {
-            return;
-        }
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
@@ -78,18 +72,45 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         bannerView.rootViewController = self
         bannerView.adSize = kGADAdSizeLargeBanner
         let request = GADRequest();
-        request.testDevices = ["89ffbd9e1437137dbc77d1f7a29de1e9"];
+        request.testDevices = ["89ffbd9e1437137dbc77d1f7a29de1e9", "b6025ac345b2382e8ec9b36a5fbb23e2"];
         bannerView.load(request)
         
         self.tableView.rowHeight = 44.0
         tableView.sectionHeaderHeight = 25.0;
         tableView.sectionFooterHeight = 2.0;
+        self.populateNavBarIcons()
+    }
+    
+    func reloadWholePage() {
         self.fetchScoreBoardFromServer()
         self.fetchPredictPointsTableData()
     }
     
+    func populateNavBarIcons() {
+        let switchButton = UIButton(type: .custom)
+        switchButton.setImage(UIImage(named: "switch"), for: .normal)
+        switchButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        switchButton.addTarget(self, action: #selector(switchMatch), for: .touchUpInside)
+        
+        let switchItem = UIBarButtonItem(customView: switchButton)
+        
+        if WhistlerManager.sharedInstance.happeningMatchs.count > 0{
+            self.navigationItem.setRightBarButtonItems([switchItem], animated: true)
+        }
+        
+    }
+    
+    @objc func switchMatch() {
+        if WhistlerManager.sharedInstance.currentMatch!.key == WhistlerManager.sharedInstance.happeningMatchs[0].key {
+            WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[1]
+        } else {
+            WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[0]
+        }
+        self.reloadWholePage()
+    }
+    
     @objc func fetchPredictPointsTableData() {
-        let request: APIRequest<PredictPointsTableResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/my_prediction_table/\(currentMatch!.key)");
+        let request: APIRequest<PredictPointsTableResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/my_prediction_table/\(WhistlerManager.sharedInstance.currentMatch!.key)");
         request.perform(withSuccess: { (response) in
             if let err = response.error {
                 self.errorFetchingScoreCard(error: err)
@@ -112,7 +133,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func fetchScoreBoardFromServer() {
-        let request: APIRequest<ScoreBoardResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/runs/score_board/\(currentMatch!.key)");
+        let request: APIRequest<ScoreBoardResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/runs/score_board/\(WhistlerManager.sharedInstance.currentMatch!.key)");
         request.perform(withSuccess: { (response) in
             if let err = response.error {
                 self.errorFetchingScoreCard(error: err)
@@ -308,8 +329,8 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "predict" {
             let vs = segue.destination as! PredictionPopupViewController
             vs.overNumberInt = self.overNumberInt
-            vs.matchKey = currentMatch!.key
-            vs.playingTeam = "a"
+            vs.matchKey = WhistlerManager.sharedInstance.currentMatch!.key
+            vs.playingTeam = "b"
         }
     }
     

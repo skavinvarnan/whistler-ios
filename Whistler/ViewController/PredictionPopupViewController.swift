@@ -54,7 +54,7 @@ class PredictionPopupViewController: UIViewController {
             loadingNotification.label.text = "Saving"
             dismissKeyboard()
 
-            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/\(matchKey)/\(playingTeam)/\(overNumber.text!)/\(predictionTextField.text!)");
+            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/iplt20_2018_g1/\(playingTeam)/\(overNumber.text!)/\(predictionTextField.text!)");
             request.perform(withSuccess: { (response) in
                 if let err = response.error {
                     self.errorSavingPrediction(error: err)
@@ -71,8 +71,13 @@ class PredictionPopupViewController: UIViewController {
     }
     
     func errorSavingPrediction(error: ErrorModel) {
-        let alertController = Utils.simpleAlertController(title: "error", message: "more disctiptive mesaage needed");
-        self.present(alertController, animated: true, completion: nil)
+        if error.code == 401 {
+            let alertController = Utils.simpleAlertController(title: "Oops", message: "Sorry!!.. This over has started, so predict the next one");
+            self.present(alertController, animated: true, completion: nil)
+        } else {
+            let alertController = Utils.simpleAlertController(title: "error", message: "more disctiptive mesaage needed");
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
