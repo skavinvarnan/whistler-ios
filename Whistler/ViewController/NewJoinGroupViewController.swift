@@ -9,6 +9,7 @@
 import UIKit
 import TRON
 import Alamofire
+import MBProgressHUD
 
 class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
@@ -32,13 +33,17 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
         } else {
             print(emoji[selectedEmoji]);
             print(groupName.text!);
-            
+            let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.indeterminate
+            loadingNotification.label.text = "Loading"
             let request: APIRequest<CreateGroup, ServerError> = TronService.sharedInstance.createRequest(path: "/group/create_group/\(groupName.text!)/\(emoji[selectedEmoji])");
 
             request.perform(withSuccess: { (response) in
                 self.navigationController?.popViewController(animated: true)
+                loadingNotification.hide(animated: true)
             }) { (error) in
                 print("Error ", error)
+                loadingNotification.hide(animated: true)
             }
         }
     }
@@ -81,7 +86,23 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
             self.present(alertController, animated: true, completion: nil)
             return;
         } else {
-            print("join group");
+            let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.indeterminate
+            loadingNotification.label.text = "Loading"
+            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/join_group/\(groupId.text!)/\(joinCode.text!)");
+            
+            request.perform(withSuccess: { (response) in
+                loadingNotification.hide(animated: true)
+                if response.error != nil {
+                    let alertController = Utils.simpleAlertController(title: "Unable to join group", message: "Check if you have entered the groupId and joincode corredtly");
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }) { (error) in
+                loadingNotification.hide(animated: true)
+                print("Error ", error)
+            }
         }
     }
     

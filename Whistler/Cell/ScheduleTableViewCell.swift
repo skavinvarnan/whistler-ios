@@ -17,6 +17,7 @@ class ScheduleTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var matchNumberLabel: UILabel!
     @IBOutlet weak var vsLabel: UILabel!
+    @IBOutlet weak var centerLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -52,11 +52,17 @@ class ScheduleViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "scheduleCell", for: indexPath) as! ScheduleTableViewCell
         let sc = self.schedule[indexPath.row]
-        cell.matchNumberLabel.text = sc.related_name;
-        cell.dateLabel.text = sc.shortName
+        cell.matchNumberLabel.text = sc.displayDate;
+        cell.dateLabel.text = sc.venue
+        cell.centerLabel.text = sc.displayTime
         cell.teamALabel.text = sc.teamAName;
         cell.teamBLabel.text = sc.teamBName;
         cell.teamAImage.image = UIImage(named: sc.teamA.uppercased());

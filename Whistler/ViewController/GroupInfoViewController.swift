@@ -32,7 +32,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
         loadingNotification.mode = MBProgressHUDMode.indeterminate
         loadingNotification.label.text = "Loading"
-        let request: APIRequest<GroupInfoResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/get_everyone_form_group/\(groupObject.id)/\(matchKey!))");
+        let request: APIRequest<GroupInfoResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/get_everyone_form_group/\(groupObject.id)/\(matchKey!)");
         request.perform(withSuccess: { (response) in
             if response.error != nil {
                 self.errorResponse()
@@ -95,6 +95,29 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         let headerCell = tableView.dequeueReusableCell(withIdentifier: "groupInfoHeaderCell")
         headerView.addSubview(headerCell!)
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return Auth.auth().currentUser?.uid == groupObject.admin &&
+            groupIntoItems[indexPath.row].uid != groupObject.admin
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            self.deleteUserFromList(groupInfoItem: self.groupIntoItems[indexPath.row])
+            self.groupIntoItems.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    func deleteUserFromList(groupInfoItem: GroupInfoItem) {
+        let request: APIRequest<CreateGroup, ServerError> = TronService.sharedInstance.createRequest(path: "/group/remove_member/\(groupObject.id)/\(groupInfoItem.uid)");
+        
+        request.perform(withSuccess: { (response) in
+            
+        }) { (error) in
+            print("Error ", error)
+        }
     }
     
     func populateNavBarIcons() {
@@ -176,8 +199,36 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
+    var textField: UITextField?
+    
+    func configurationTextField(textField: UITextField!) {
+        if (textField) != nil {
+            self.textField = textField!        //Save reference to the UITextField
+            self.textField?.placeholder = "New group name";
+        }
+    }
+    
     @objc func editGroup() {
-        
+        let alert = UIAlertController(title: "Edit group", message: "Change your group name", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:{ (UIAlertAction) in
+            if !self.textField!.text!.isEmpty  {
+                let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
+                loadingNotification.mode = MBProgressHUDMode.indeterminate
+                loadingNotification.label.text = "Loading"
+                let request: APIRequest<CreateGroup, ServerError> = TronService.sharedInstance.createRequest(path: "/group/edit_group/\(self.groupObject.id)/\(self.textField!.text!)/\(self.groupObject.icon!)");
+                
+                request.perform(withSuccess: { (response) in
+                    loadingNotification.hide(animated: true)
+                    self.navigationController?.popViewController(animated: true)
+                }) { (error) in
+                    loadingNotification.hide(animated: true)
+                    print("Error ", error)
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func serverNotReachable() {

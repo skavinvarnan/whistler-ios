@@ -16,6 +16,7 @@ class PredictPointsTableResponse: JSONDecodable {
     required init(json: JSON) {
         var pointsTableData = [PredictPointsTableData]()
         let array = json["predictPointsTableData"].array;
+        
         if array != nil {
             for groupJson in array! {
                 
@@ -24,8 +25,8 @@ class PredictPointsTableResponse: JSONDecodable {
                 let predicted = PredictPointsTableResponse.getPredictPointsItem(fromDictionary: groupJson["predicted"].dictionary!)
                 let points = PredictPointsTableResponse.getPredictPointsItem(fromDictionary: groupJson["points"].dictionary!)
                 let predictButton = PredictPointsTableResponse.getPredictPointsItem(fromDictionary: groupJson["predictButton"].dictionary!)
-        
-                pointsTableData.append(PredictPointsTableData(over: over, runs: runs, predicted: predicted, points: points, predictButton: predictButton))
+                let teamBatting = json["teamBatting"].stringValue
+                pointsTableData.append(PredictPointsTableData(over: over, runs: runs, predicted: predicted, points: points, predictButton: predictButton, teamBatting: teamBatting))
             }
         }
         self.error = ErrorUtils.createErrorObjectFrom(json: json)

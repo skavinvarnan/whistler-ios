@@ -33,8 +33,10 @@ class ScheduleList: JSONDecodable {
                 let team_b_name = groupJson["team_b_name"].stringValue
                 let start_date_timestamp = groupJson["start_date_timestamp"].numberValue
                 let key = groupJson["key"].stringValue
+                let displayDate = groupJson["displayDate"].stringValue
+                let displayTime = groupJson["displayTime"].stringValue
                 
-                let schedule = Schedule(_id: id, status: status, related_name: related_name, name: name, shortName: short_name, venue: venue, winningTeam: winner_team, startDateTimeStamp: start_date_timestamp, teamA: team_a, teamB: team_b, teamAName: team_a_name, teamBName: team_b_name, key: key)
+                let schedule = Schedule(_id: id, status: status, related_name: related_name, name: name, shortName: short_name, venue: venue, winningTeam: winner_team, startDateTimeStamp: start_date_timestamp, teamA: team_a, teamB: team_b, teamAName: team_a_name, teamBName: team_b_name, key: key, displayDate: displayDate, displayTime: displayTime)
                 schedules.append(schedule)
             }
         }

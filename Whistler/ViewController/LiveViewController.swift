@@ -11,6 +11,7 @@ import QuartzCore
 import TRON
 import GoogleMobileAds
 import Firebase
+import MBProgressHUD
 
 class LiveViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
@@ -20,6 +21,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     var updateLabelTimer: Timer?
     var updatedHowManySecondsAgo: Int = 0
     var refresher: UIRefreshControl!
+    var scoreCard: ScoreBoard?
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var teamShortName: UILabel!
@@ -56,9 +58,14 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var predictTableData = [PredictPointsTableData]()
     
+    var loadingNotification: MBProgressHUD?
+    var showProgressBar = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification!.mode = MBProgressHUDMode.indeterminate
+        loadingNotification!.label.text = "Loading"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
@@ -79,11 +86,16 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.sectionHeaderHeight = 25.0;
         tableView.sectionFooterHeight = 2.0;
         self.populateNavBarIcons()
+        self.title = "Loading"
+        self.fetchScoreBoardFromServer()
+        self.fetchPredictPointsTableData()
     }
     
     func reloadWholePage() {
         self.fetchScoreBoardFromServer()
         self.fetchPredictPointsTableData()
+        self.predictTableData.removeAll()
+        self.tableView.reloadData()
     }
     
     func populateNavBarIcons() {
@@ -94,33 +106,60 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let switchItem = UIBarButtonItem(customView: switchButton)
         
-        if WhistlerManager.sharedInstance.happeningMatchs.count > 0{
-            self.navigationItem.setRightBarButtonItems([switchItem], animated: true)
+        let settingsButton = UIButton(type: .custom)
+        settingsButton.setImage(UIImage(named: "settings"), for: .normal)
+        settingsButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        settingsButton.addTarget(self, action: #selector(showSettings), for: .touchUpInside)
+        
+        let settingsItem = UIBarButtonItem(customView: settingsButton)
+        
+        if WhistlerManager.sharedInstance.happeningMatchs.count > 1 {
+            self.navigationItem.setRightBarButtonItems([settingsItem, switchItem], animated: true)
+        } else {
+            self.navigationItem.setRightBarButtonItems([settingsItem], animated: true)
         }
         
     }
     
-    @objc func switchMatch() {
+    @objc func showSettings() {
+        performSegue(withIdentifier: "settings", sender: nil)
+    }
+    
+    func getOtherMatchName() -> String {
         if WhistlerManager.sharedInstance.currentMatch!.key == WhistlerManager.sharedInstance.happeningMatchs[0].key {
-            WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[1]
+            return WhistlerManager.sharedInstance.happeningMatchs[1].shortName
         } else {
-            WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[0]
+            return WhistlerManager.sharedInstance.happeningMatchs[0].shortName
         }
-        self.reloadWholePage()
+    }
+    
+    @objc func switchMatch() {
+        let alert = UIAlertController(title: "\(self.getOtherMatchName())", message: "Want to see this match?", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { action in
+            if WhistlerManager.sharedInstance.currentMatch!.key == WhistlerManager.sharedInstance.happeningMatchs[0].key {
+                WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[1]
+            } else {
+                WhistlerManager.sharedInstance.currentMatch = WhistlerManager.sharedInstance.happeningMatchs[0]
+            }
+            self.showProgressBar = true;
+            self.reloadWholePage()
+        }))
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func fetchPredictPointsTableData() {
         let request: APIRequest<PredictPointsTableResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/my_prediction_table/\(WhistlerManager.sharedInstance.currentMatch!.key)");
         request.perform(withSuccess: { (response) in
+            self.refresher.endRefreshing()
             if let err = response.error {
-                self.errorFetchingScoreCard(error: err)
+                self.errorFetchingPointsTable(error: err)
             } else {
                 self.populate(predictTableData: response.pointsTableData!)
                 self.tableView.reloadData()
-                self.refresher.endRefreshing()
             }
         }) { (error) in
-            self.errorFetchingScoreCard(error: ErrorModel(code: 123, message: "Guessing no internet"))
+            self.errorFetchingPointsTable(error: ErrorModel(code: 123, message: "Guessing no internet"))
             self.refresher.endRefreshing()
         }
     }
@@ -133,15 +172,28 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func fetchScoreBoardFromServer() {
+        if showProgressBar {
+            loadingNotification!.show(animated: true)
+        }
         let request: APIRequest<ScoreBoardResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/runs/score_board/\(WhistlerManager.sharedInstance.currentMatch!.key)");
         request.perform(withSuccess: { (response) in
             if let err = response.error {
                 self.errorFetchingScoreCard(error: err)
+                self.hideProgressBar()
             } else {
                 self.populate(scoreBoard: response.scoreBoard!)
+                self.hideProgressBar()
             }
         }) { (error) in
             self.errorFetchingScoreCard(error: ErrorModel(code: 123, message: "Guessing no internet"))
+            self.hideProgressBar()
+        }
+    }
+    
+    func hideProgressBar() {
+        if showProgressBar {
+            loadingNotification!.hide(animated: true)
+            showProgressBar = false
         }
     }
     
@@ -176,12 +228,12 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     func stopScoreCardTimer() {
-        if scoreCardTimer == nil {
+        if scoreCardTimer != nil {
             scoreCardTimer?.invalidate()
             scoreCardTimer = nil
         }
         
-        if updateLabelTimer == nil {
+        if updateLabelTimer != nil {
             updateLabelTimer?.invalidate()
             updateLabelTimer = nil
         }
@@ -192,12 +244,15 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.dismiss(animated: true, completion: nil)
             return
         }
+        self.fetchScoreBoardFromServer()
+        self.fetchPredictPointsTableData()
         self.startScoreCardTimer()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         self.stopScoreCardTimer()
     }
+
     
     func populate(scoreBoard: ScoreBoard) {
         updatedHowManySecondsAgo = 0;
@@ -233,10 +288,22 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.bowlerWickets.text = scoreBoard.bowlerWickets
         self.bowlerEconomy.text = scoreBoard.bowlerEconomy
         self.title = scoreBoard.title
+        self.scoreCard = scoreBoard
+    }
+    
+    var predictionTableMessage: String?
+    
+    func errorFetchingPointsTable(error: ErrorModel) {
+        if error.code == 4001 {
+            predictionTableMessage = error.message!
+            self.tableView.reloadData()
+        } else {
+            predictionTableMessage = "Unable to load data"
+        }
     }
     
     func errorFetchingScoreCard(error: ErrorModel) {
-        //TODO: handle case
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -320,7 +387,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func predict(sender: UIButton) {
         self.overNumberInt = sender.tag
-        if overNumberInt != -1 {
+        if self.predictTableData.count > 0 {
             performSegue(withIdentifier: "predict", sender: nil)
         }
     }
@@ -330,7 +397,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             let vs = segue.destination as! PredictionPopupViewController
             vs.overNumberInt = self.overNumberInt
             vs.matchKey = WhistlerManager.sharedInstance.currentMatch!.key
-            vs.playingTeam = "b"
+            vs.playingTeam = self.predictTableData[0].teamBatting
         }
     }
     
@@ -343,7 +410,11 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.tableView.separatorStyle = .singleLine
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-            noDataLabel.text = "Loading..."
+            if let mess = self.predictionTableMessage {
+                noDataLabel.text = mess
+            } else {
+                noDataLabel.text = "Loading..."
+            }
             noDataLabel.numberOfLines = 1;
             noDataLabel.textColor = UIColor.init(hex: "#2A292B")
             noDataLabel.textAlignment = NSTextAlignment.center

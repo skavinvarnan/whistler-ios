@@ -41,6 +41,8 @@ struct Schedule {
     let teamAName: String
     let teamBName: String
     let key: String
+    let displayDate: String
+    let displayTime: String
 }
 
 struct ScoreBoard {
@@ -75,6 +77,7 @@ struct ScoreBoard {
     let bowlerEconomy: String
     let title: String
     let showUpdated: Bool
+    let battingTeam: String
 }
 
 struct PredictPointsTableData {
@@ -83,6 +86,7 @@ struct PredictPointsTableData {
     let predicted: PredictPointsTableItem
     let points: PredictPointsTableItem
     let predictButton: PredictPointsTableItem
+    let teamBatting: String
 }
 
 struct PredictPointsTableItem {

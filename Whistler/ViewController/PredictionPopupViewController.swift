@@ -13,8 +13,8 @@ import TRON
 class PredictionPopupViewController: UIViewController {
 
     var overNumberInt = -1;
-    var matchKey = ""
-    var playingTeam = ""
+    var matchKey: String?
+    var playingTeam: String?
     var keyboardVisible = false
     
     @IBOutlet weak var overNumber: UILabel!
@@ -54,7 +54,7 @@ class PredictionPopupViewController: UIViewController {
             loadingNotification.label.text = "Saving"
             dismissKeyboard()
 
-            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/iplt20_2018_g1/\(playingTeam)/\(overNumber.text!)/\(predictionTextField.text!)");
+            let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/\(WhistlerManager.sharedInstance.currentMatch!.key)/\(playingTeam!)/\(overNumber.text!)/\(predictionTextField.text!)");
             request.perform(withSuccess: { (response) in
                 if let err = response.error {
                     self.errorSavingPrediction(error: err)

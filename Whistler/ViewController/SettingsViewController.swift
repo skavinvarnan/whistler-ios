@@ -27,6 +27,18 @@ class SettingsViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    
+    @IBAction func privacyClicked(_ sender: UIButton) {
+        if let url = URL(string: "https://www.guessbuzz.in/privacy.html") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @IBAction func termsOfServiceClicked(_ sender: Any) {
+        if let url = URL(string: "https://www.guessbuzz.in/terms.html") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
     @IBAction func logout(_ sender: UIButton) {
         do {
             try Auth.auth().signOut()
