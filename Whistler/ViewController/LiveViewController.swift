@@ -13,7 +13,7 @@ import GoogleMobileAds
 import Firebase
 import MBProgressHUD
 
-class LiveViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
+class LiveViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let elements = ["asdf", "asdf", "asdf", "asdf", "asdf"]
     
@@ -74,13 +74,6 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         refresher.addTarget(self, action: #selector(fetchPredictPointsTableData), for: UIControlEvents.valueChanged)
         tableView.addSubview(refresher)
         
-        bannerView.delegate = self
-        bannerView.adUnitID = "ca-app-pub-7846555754762077/1155629537"
-        bannerView.rootViewController = self
-        bannerView.adSize = kGADAdSizeLargeBanner
-        let request = GADRequest();
-        request.testDevices = ["89ffbd9e1437137dbc77d1f7a29de1e9", "b6025ac345b2382e8ec9b36a5fbb23e2"];
-        bannerView.load(request)
         
         self.tableView.rowHeight = 44.0
         tableView.sectionHeaderHeight = 25.0;
@@ -89,6 +82,22 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.title = "Loading"
         self.fetchScoreBoardFromServer()
         self.fetchPredictPointsTableData()
+        
+        self.loadAd()
+        
+        var headerFrame: CGRect? = tableView.tableHeaderView?.frame
+        headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
+        tableView.tableHeaderView?.frame = headerFrame!
+        
+    }
+    
+    func loadAd() {
+        bannerView.adUnitID = Constants.AdMob.UNIT_LIVE
+        bannerView.rootViewController = self
+        bannerView.adSize = kGADAdSizeLargeBanner
+        let request = GADRequest();
+        request.testDevices = Constants.AdMob.TEST_DEVICES;
+        bannerView.load(request)
     }
     
     func reloadWholePage() {
@@ -122,6 +131,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func showSettings() {
+        Analytics.logEvent("settings", parameters: [:])
         performSegue(withIdentifier: "settings", sender: nil)
     }
     
@@ -424,48 +434,7 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         return numOfSection
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        let headerView = UIView()
-        let headerCell = tableView.dequeueReusableCell(withIdentifier: "headerCell") as! PredictionHeaderTableViewCell
-        headerView.addSubview(headerCell)
-        return headerView
-    }
-    
     func test() {
         print("test")
-    }
-    
-    /// Tells the delegate an ad request loaded an ad.
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        print("adViewDidReceiveAd")
-    }
-    
-    /// Tells the delegate an ad request failed.
-    func adView(_ bannerView: GADBannerView,
-                didFailToReceiveAdWithError error: GADRequestError) {
-        print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
-    }
-    
-    /// Tells the delegate that a full-screen view will be presented in response
-    /// to the user clicking on an ad.
-    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
-        print("adViewWillPresentScreen")
-    }
-    
-    /// Tells the delegate that the full-screen view will be dismissed.
-    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
-        print("adViewWillDismissScreen")
-    }
-    
-    /// Tells the delegate that the full-screen view has been dismissed.
-    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
-        print("adViewDidDismissScreen")
-    }
-    
-    /// Tells the delegate that a user click will open another app (such as
-    /// the App Store), backgrounding the current app.
-    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-        print("adViewWillLeaveApplication")
     }
 }

@@ -48,6 +48,10 @@
 		30E5FB61206023E700587750 /* PredictionHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E5FB60206023E700587750 /* PredictionHeaderTableViewCell.swift */; };
 		30E5FB642060C99F00587750 /* GroupIconCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E5FB632060C99F00587750 /* GroupIconCollectionViewCell.swift */; };
 		30E5FB662060CB6C00587750 /* NewJoinGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E5FB652060CB6C00587750 /* NewJoinGroupViewController.swift */; };
+		30EF887220714863003BE535 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EF887120714863003BE535 /* LeaderboardViewController.swift */; };
+		30EF8874207148D2003BE535 /* LeaderboardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EF8873207148D2003BE535 /* LeaderboardResponse.swift */; };
+		30EF887620714AFD003BE535 /* LeaderBoardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EF887520714AFD003BE535 /* LeaderBoardTableViewCell.swift */; };
+		30EF887820715163003BE535 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30EF887720715163003BE535 /* MainTabBarViewController.swift */; };
 		F622FCDB25DB266F341EE533 /* Pods_Whistler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8933718BA1244022742D2082 /* Pods_Whistler.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +100,10 @@
 		30E5FB60206023E700587750 /* PredictionHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		30E5FB632060C99F00587750 /* GroupIconCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupIconCollectionViewCell.swift; sourceTree = "<group>"; };
 		30E5FB652060CB6C00587750 /* NewJoinGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewJoinGroupViewController.swift; sourceTree = "<group>"; };
+		30EF887120714863003BE535 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
+		30EF8873207148D2003BE535 /* LeaderboardResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardResponse.swift; sourceTree = "<group>"; };
+		30EF887520714AFD003BE535 /* LeaderBoardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardTableViewCell.swift; sourceTree = "<group>"; };
+		30EF887720715163003BE535 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		7C7A1C0522BE2CDA0A4DA7B1 /* Pods-Whistler.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whistler.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Whistler/Pods-Whistler.debug.xcconfig"; sourceTree = "<group>"; };
 		8933718BA1244022742D2082 /* Pods_Whistler.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Whistler.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC3FAD3B383713E5C9BD26AE /* Pods-Whistler.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Whistler.release.xcconfig"; path = "Pods/Target Support Files/Pods-Whistler/Pods-Whistler.release.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +146,7 @@
 				303F5307206BFCCA00EBBD60 /* GroupInfoResponse.swift */,
 				303F5315206C18B400EBBD60 /* UserPredictionItemResponse.swift */,
 				302A35FF206D25CD0006B317 /* MatchReportResponse.swift */,
+				30EF8873207148D2003BE535 /* LeaderboardResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -157,6 +166,8 @@
 				303F530D206C092600EBBD60 /* UserPredictionReportViewController.swift */,
 				303F530F206C098B00EBBD60 /* UserMatchsReportViewController.swift */,
 				303F5311206C0F7C00EBBD60 /* UserPredictionReportLastViewController.swift */,
+				30EF887120714863003BE535 /* LeaderboardViewController.swift */,
+				30EF887720715163003BE535 /* MainTabBarViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -209,6 +220,7 @@
 				303F5313206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift */,
 				302A3601206D26690006B317 /* UserMatchReportItemTableViewCell.swift */,
 				302A3603206D26900006B317 /* UserPredictionReportLastTableViewCell.swift */,
+				30EF887520714AFD003BE535 /* LeaderBoardTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -403,6 +415,7 @@
 				30E5FB5D206018BA00587750 /* PredictionTableViewCell.swift in Sources */,
 				303F5310206C098B00EBBD60 /* UserMatchsReportViewController.swift in Sources */,
 				302A3602206D26690006B317 /* UserMatchReportItemTableViewCell.swift in Sources */,
+				30EF8874207148D2003BE535 /* LeaderboardResponse.swift in Sources */,
 				30E5FB61206023E700587750 /* PredictionHeaderTableViewCell.swift in Sources */,
 				304EEBCC2060EB1F00DA2317 /* Utils.swift in Sources */,
 				303F7C262062983D00199759 /* ErrorUtils.swift in Sources */,
@@ -424,6 +437,7 @@
 				303F5306206BF7F600EBBD60 /* GroupInfoTableViewCell.swift in Sources */,
 				30B4F2B520641899009992F9 /* ScoreBoardResponse.swift in Sources */,
 				303F530E206C092600EBBD60 /* UserPredictionReportViewController.swift in Sources */,
+				30EF887820715163003BE535 /* MainTabBarViewController.swift in Sources */,
 				303F7C302062DE6200199759 /* ScheduleViewController.swift in Sources */,
 				30D765C62048928700E3E06B /* AppDelegate.swift in Sources */,
 				30720EB92066391100388EE2 /* PredictPointsTableResponse.swift in Sources */,
@@ -431,8 +445,10 @@
 				304EEBDB2061600000DA2317 /* GroupList.swift in Sources */,
 				303F530A206C004300EBBD60 /* WhistlerManager.swift in Sources */,
 				304EEBDD2061611700DA2317 /* Models.swift in Sources */,
+				30EF887620714AFD003BE535 /* LeaderBoardTableViewCell.swift in Sources */,
 				304EEBCF20610B1B00DA2317 /* TronService.swift in Sources */,
 				303F5314206C170A00EBBD60 /* UserPredictionItemTableViewCell.swift in Sources */,
+				30EF887220714863003BE535 /* LeaderboardViewController.swift in Sources */,
 				30A4F67920597E1C00726B88 /* SignInViewController.swift in Sources */,
 				30E5FB642060C99F00587750 /* GroupIconCollectionViewCell.swift in Sources */,
 				30E5FB5F20601C4700587750 /* LiveViewController.swift in Sources */,

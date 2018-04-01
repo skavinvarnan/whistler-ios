@@ -10,10 +10,12 @@ import UIKit
 import Firebase
 import TRON
 import MBProgressHUD
+import GoogleMobileAds
 
 class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     var firstLoad = true
     
@@ -31,6 +33,17 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         refresher.addTarget(self, action: #selector(populate), for: UIControlEvents.valueChanged)
         tableView.addSubview(refresher)
         self.fetchGroupsFromServer();
+        self.loadAd()
+        
+    }
+    
+    func loadAd() {
+        bannerView.adUnitID = Constants.AdMob.UNIT_GROUPS
+        bannerView.rootViewController = self
+        bannerView.adSize = kGADAdSizeBanner
+        let request = GADRequest();
+        request.testDevices = Constants.AdMob.TEST_DEVICES;
+        bannerView.load(request)
     }
     
     func fetchGroupsFromServer() {
@@ -106,6 +119,7 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Analytics.logEvent("check_group_info", parameters: [:])
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.selectedGroupRow = indexPath.row
         performSegue(withIdentifier: "groupInfo", sender: nil)

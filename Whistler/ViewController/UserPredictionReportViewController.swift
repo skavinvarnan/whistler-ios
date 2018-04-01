@@ -9,6 +9,8 @@
 import UIKit
 import TRON
 import MBProgressHUD
+import Firebase
+import GoogleMobileAds
 
 class UserPredictionReportViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -17,6 +19,7 @@ class UserPredictionReportViewController: UIViewController, UITableViewDelegate,
     var matchKey: String?
     var userName: String?
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     var predictions = [UserPredictionItem]()
     override func viewDidLoad() {
@@ -27,6 +30,19 @@ class UserPredictionReportViewController: UIViewController, UITableViewDelegate,
         self.title = userName!
         button.setTitle("\(userName!)'s all matches", for: .normal)
         self.getUserPredictionForMatch();
+        self.loadAd()
+        var headerFrame: CGRect? = tableView.tableHeaderView?.frame
+        headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
+        tableView.tableHeaderView?.frame = headerFrame!
+    }
+    
+    func loadAd() {
+        bannerView.adUnitID = Constants.AdMob.UNIT_MATCH_REPORT
+        bannerView.rootViewController = self
+        bannerView.adSize = kGADAdSizeBanner
+        let request = GADRequest();
+        request.testDevices = Constants.AdMob.TEST_DEVICES;
+        bannerView.load(request)
     }
     
     func getUserPredictionForMatch() {
@@ -76,6 +92,7 @@ class UserPredictionReportViewController: UIViewController, UITableViewDelegate,
     }
     
     @IBAction func clickedUsersOtherMatches(_ sender: UIButton) {
+        Analytics.logEvent("check_all_match_points", parameters: [:])
         performSegue(withIdentifier: "userMatchReport", sender: nil)
     }
     
@@ -85,14 +102,6 @@ class UserPredictionReportViewController: UIViewController, UITableViewDelegate,
             vc.uid = uid!
             vc.userName = userName!
         }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerView = UIView()
-        let headerCell = tableView.dequeueReusableCell(withIdentifier: "predictionReportHeaderCell")!
-        headerView.addSubview(headerCell)
-        return headerView
     }
 
 }

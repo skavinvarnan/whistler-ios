@@ -116,3 +116,9 @@ struct MatchReportItem {
     let matchKey: String
     let points: Int
 }
+
+struct LeaderBoardItem {
+    let uid: String
+    let name: String
+    let totalForMatch: Int
+}

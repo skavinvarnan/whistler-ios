@@ -31,20 +31,24 @@ class SettingsViewController: UIViewController {
     @IBAction func privacyClicked(_ sender: UIButton) {
         if let url = URL(string: "https://www.guessbuzz.in/privacy.html") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("privacy_settings", parameters: [:])
         }
     }
     
     @IBAction func termsOfServiceClicked(_ sender: Any) {
         if let url = URL(string: "https://www.guessbuzz.in/terms.html") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("terms_settings", parameters: [:])
         }
     }
     @IBAction func logout(_ sender: UIButton) {
+        Analytics.logEvent("logout", parameters: [:])
         do {
             try Auth.auth().signOut()
             GIDSignIn.sharedInstance().signOut();
             self.dismiss(animated: true, completion: nil)
         } catch let error as NSError {
+            Analytics.logEvent("logout_error", parameters: [:])
             self.errorInSignOut(error: error);
         }
         

@@ -10,6 +10,7 @@ import UIKit
 import TRON
 import Alamofire
 import MBProgressHUD
+import Firebase
 
 class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
@@ -27,6 +28,7 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
     @IBAction func createGroupClicked(_ sender: UIButton) {
         
         if groupName.text?.isEmpty ?? true {
+            Analytics.logEvent("group_name_empty", parameters: [:])
             let alertController = Utils.simpleAlertController(title: "Group name", message: "Please enter the group name and click on create group")
             self.present(alertController, animated: true, completion: nil)
             return;
@@ -41,8 +43,10 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
             request.perform(withSuccess: { (response) in
                 self.navigationController?.popViewController(animated: true)
                 loadingNotification.hide(animated: true)
+                Analytics.logEvent("create_group", parameters: [:])
             }) { (error) in
                 print("Error ", error)
+                Analytics.logEvent("create_group_error", parameters: [:])
                 loadingNotification.hide(animated: true)
             }
         }
@@ -82,6 +86,7 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
     
     func joinGroup() {
         if joinCode.text?.isEmpty ?? true || groupId.text?.isEmpty ?? true {
+            Analytics.logEvent("join_group_empty", parameters: [:])
             let alertController = Utils.simpleAlertController(title: "Group ID Join code", message: "Please enter your group id and join code. You can get this from group admin")
             self.present(alertController, animated: true, completion: nil)
             return;
@@ -94,12 +99,15 @@ class NewJoinGroupViewController: UIViewController, UICollectionViewDelegate, UI
             request.perform(withSuccess: { (response) in
                 loadingNotification.hide(animated: true)
                 if response.error != nil {
+                    Analytics.logEvent("join_group_error", parameters: [:])
                     let alertController = Utils.simpleAlertController(title: "Unable to join group", message: "Check if you have entered the groupId and joincode corredtly");
                     self.present(alertController, animated: true, completion: nil)
                 } else {
+                    Analytics.logEvent("join_group", parameters: [:])
                     self.navigationController?.popViewController(animated: true)
                 }
             }) { (error) in
+                Analytics.logEvent("join_group_error", parameters: [:])
                 loadingNotification.hide(animated: true)
                 print("Error ", error)
             }

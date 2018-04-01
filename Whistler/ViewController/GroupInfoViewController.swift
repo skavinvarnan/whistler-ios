@@ -26,6 +26,9 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         print(groupObject!);
         self.populateNavBarIcons();
         self.getGroupMembers();
+        var headerFrame: CGRect? = tableView.tableHeaderView?.frame
+        headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 1.5
+        tableView.tableHeaderView?.frame = headerFrame!
     }
     
     func getGroupMembers() {
@@ -49,6 +52,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Analytics.logEvent("check_match_report", parameters: [:])
         self.tableView.deselectRow(at: indexPath, animated: true)
         openingUid = groupIntoItems[indexPath.row].uid
         openingName = groupIntoItems[indexPath.row].name
@@ -90,12 +94,12 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        let headerCell = tableView.dequeueReusableCell(withIdentifier: "groupInfoHeaderCell")
-        headerView.addSubview(headerCell!)
-        return headerView
-    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let headerView = UIView()
+//        let headerCell = tableView.dequeueReusableCell(withIdentifier: "groupInfoHeaderCell")
+//        headerView.addSubview(headerCell!)
+//        return headerView
+//    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return Auth.auth().currentUser?.uid == groupObject.admin &&
@@ -114,8 +118,9 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         let request: APIRequest<CreateGroup, ServerError> = TronService.sharedInstance.createRequest(path: "/group/remove_member/\(groupObject.id)/\(groupInfoItem.uid)");
         
         request.perform(withSuccess: { (response) in
-            
+            Analytics.logEvent("remove_group_member", parameters: [:])
         }) { (error) in
+            Analytics.logEvent("remove_group_member_error", parameters: [:])
             print("Error ", error)
         }
     }
@@ -147,6 +152,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func shareJoinCode(_ sender: UIButton) {
+        Analytics.logEvent("invite_friends", parameters: [:])
         let text = "Group id: \(groupObject.groupId.uppercased()) Join code: \(groupObject.joinCode)"
         let textToShare = [ text ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
@@ -177,11 +183,14 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/delete_group/\(self.groupObject.id)")
         request.perform(withSuccess: { (response) in
             if let error = response.error {
+                Analytics.logEvent("delete_group_error", parameters: [:])
                 self.apiError(error: error)
             } else {
+                Analytics.logEvent("delete_group", parameters: [:])
                 self.navigationController?.popViewController(animated: true)
             }
         }) { (error) in
+            Analytics.logEvent("delete_group_error", parameters: [:])
             self.serverNotReachable()
         }
     }
@@ -190,11 +199,14 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
         let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/group/leave_group/\(self.groupObject.id)")
         request.perform(withSuccess: { (response) in
             if let error = response.error {
+                Analytics.logEvent("leave_group_error", parameters: [:])
                 self.apiError(error: error)
             } else {
+                Analytics.logEvent("leave_group", parameters: [:])
                 self.navigationController?.popViewController(animated: true)
             }
         }) { (error) in
+            Analytics.logEvent("leave_group_error", parameters: [:])
             self.serverNotReachable()
         }
     }
@@ -204,6 +216,10 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     func configurationTextField(textField: UITextField!) {
         if (textField) != nil {
             self.textField = textField!        //Save reference to the UITextField
+            self.textField?.textContentType = .name
+            self.textField?.autocapitalizationType = .words
+            self.textField?.autocorrectionType = .no
+            self.textField?.spellCheckingType = .no
             self.textField?.placeholder = "New group name";
         }
     }
@@ -222,10 +238,14 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
                 request.perform(withSuccess: { (response) in
                     loadingNotification.hide(animated: true)
                     self.navigationController?.popViewController(animated: true)
+                    Analytics.logEvent("edit_group", parameters: [:])
                 }) { (error) in
+                    Analytics.logEvent("edit_group_error", parameters: [:])
                     loadingNotification.hide(animated: true)
                     print("Error ", error)
                 }
+            } else {
+                Analytics.logEvent("edit_group_empty", parameters: [:])
             }
         }))
         self.present(alert, animated: true, completion: nil)

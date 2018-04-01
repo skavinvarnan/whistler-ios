@@ -9,6 +9,8 @@
 import UIKit
 import TRON
 import MBProgressHUD
+import Firebase
+import GoogleMobileAds
 
 class UserPredictionReportLastViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -16,6 +18,7 @@ class UserPredictionReportLastViewController: UIViewController, UITableViewDeleg
     var matchKey: String?
     var passingTitle: String?
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     var predictions = [UserPredictionItem]()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +26,19 @@ class UserPredictionReportLastViewController: UIViewController, UITableViewDeleg
         tableView.dataSource = self
         self.title = passingTitle!
         self.getUserPredictionForMatch();
+        self.loadAd()
+        var headerFrame: CGRect? = tableView.tableHeaderView?.frame
+        headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
+        tableView.tableHeaderView?.frame = headerFrame!
+    }
+    
+    func loadAd() {
+        bannerView.adUnitID = Constants.AdMob.UNIT_MATCH_REPORT_LAST
+        bannerView.rootViewController = self
+        bannerView.adSize = kGADAdSizeBanner
+        let request = GADRequest();
+        request.testDevices = Constants.AdMob.TEST_DEVICES;
+        bannerView.load(request)
     }
     
     func getUserPredictionForMatch() {
@@ -73,13 +89,5 @@ class UserPredictionReportLastViewController: UIViewController, UITableViewDeleg
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerView = UIView()
-        let headerCell = tableView.dequeueReusableCell(withIdentifier: "predictionReportLastHeaderCell")!
-        headerView.addSubview(headerCell)
-        return headerView
     }
 }

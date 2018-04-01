@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-7846555754762077~5011167966")
+        GADMobileAds.configure(withApplicationID: Constants.AdMob.APPLICATION_ID)
         
         return true
     }

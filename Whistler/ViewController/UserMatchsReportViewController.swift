@@ -9,6 +9,8 @@
 import UIKit
 import TRON
 import MBProgressHUD
+import Firebase
+import GoogleMobileAds
 
 class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -17,6 +19,7 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
     var userName: String?
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     var items = [MatchReportItem]()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,19 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
         tableView.dataSource = self
         self.title = "All Matches"
         self.getUserMatchesReport();
+        self.loadAd()
+        var headerFrame: CGRect? = tableView.tableHeaderView?.frame
+        headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
+        tableView.tableHeaderView?.frame = headerFrame!
+    }
+    
+    func loadAd() {
+        bannerView.adUnitID = Constants.AdMob.UNIT_ALL_MATCHES
+        bannerView.rootViewController = self
+        bannerView.adSize = kGADAdSizeBanner
+        let request = GADRequest();
+        request.testDevices = Constants.AdMob.TEST_DEVICES;
+        bannerView.load(request)
     }
     
     func getUserMatchesReport() {
@@ -76,6 +92,7 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Analytics.logEvent("check_match_report_last", parameters: [:])
         self.tableView.deselectRow(at: indexPath, animated: true)
         matchKey = items[indexPath.row].matchKey
         passingTitle = items[indexPath.row].match
@@ -90,14 +107,6 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
             vc.matchKey = matchKey!
             vc.passingTitle = passingTitle!
         }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let headerView = UIView()
-        let headerCell = tableView.dequeueReusableCell(withIdentifier: "userMatchReportHeaderTableCell")!
-        headerView.addSubview(headerCell)
-        return headerView
     }
     
 

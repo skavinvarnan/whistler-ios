@@ -9,6 +9,7 @@
 import UIKit
 import MBProgressHUD
 import TRON
+import Firebase
 
 class PredictionPopupViewController: UIViewController {
 
@@ -29,6 +30,7 @@ class PredictionPopupViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closePopup))
         view.addGestureRecognizer(tap)
         predictionTextField.becomeFirstResponder()
+        Analytics.logEvent("prediction_open", parameters: [:])
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,16 +59,21 @@ class PredictionPopupViewController: UIViewController {
             let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/prediction/predict/\(WhistlerManager.sharedInstance.currentMatch!.key)/\(playingTeam!)/\(overNumber.text!)/\(predictionTextField.text!)");
             request.perform(withSuccess: { (response) in
                 if let err = response.error {
+                    Analytics.logEvent("prediction_error", parameters: [:])
                     self.errorSavingPrediction(error: err)
                     loadingNotification.hide(animated: true)
                 } else {
+                    Analytics.logEvent("prediction_done", parameters: [:])
                     loadingNotification.hide(animated: true)
                     self.dismiss(animated: true, completion: nil)
                 }
             }) { (error) in
+                Analytics.logEvent("prediction_error", parameters: [:])
                 loadingNotification.hide(animated: true)
                 self.errorSavingPrediction(error: ErrorModel(code: 123, message: "Guessing no internet"))
             }
+        } else {
+            Analytics.logEvent("prediction_empty", parameters: [:])
         }
     }
     

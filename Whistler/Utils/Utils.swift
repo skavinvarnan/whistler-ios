@@ -26,6 +26,19 @@ struct Constants {
     struct Tron {
         static let BASE_URL = "http://192.168.1.139:7325/api"
     }
+    
+    struct AdMob {
+        static let APPLICATION_ID = "ca-app-pub-7846555754762077~5011167966"
+        
+        static let UNIT_LIVE = "ca-app-pub-7846555754762077/1155629537"
+        static let UNIT_GROUPS = "ca-app-pub-7846555754762077/1738226658"
+        static let UNIT_MATCH_REPORT = "ca-app-pub-7846555754762077/9990506793"
+        static let UNIT_ALL_MATCHES = "ca-app-pub-7846555754762077/4743663945"
+        static let UNIT_MATCH_REPORT_LAST = "ca-app-pub-7846555754762077/2281152131"
+        static let UNIT_LEADER_BOARD = "ca-app-pub-7846555754762077/6635739239"
+        
+        static let TEST_DEVICES = ["89ffbd9e1437137dbc77d1f7a29de1e9", "b6025ac345b2382e8ec9b36a5fbb23e2"]
+    }
 }
 
 extension UIColor {

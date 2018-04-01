@@ -11,6 +11,7 @@ import UIKit
 import Firebase
 import GoogleSignIn
 import TRON
+import MBProgressHUD
 
 class SignInViewController: UIViewController, GIDSignInUIDelegate {
 
@@ -23,6 +24,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         super.viewDidLoad()
         GIDSignIn.sharedInstance().uiDelegate = self
         self.initLabel()
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: .UIApplicationWillEnterForeground, object: nil)
     }
     
     func initLabel() {
@@ -55,18 +57,26 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
     }
     
     @objc func openTerms(_: UIAlertAction){
-        if let url = URL(string: "https://www.guessbuzz.in/terms.html") {
+        if let url = URL(string: "https://guessbuzz.in/terms.html") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("terms", parameters: [:])
         }
     }
     
     @objc func openPrivacy(_: UIAlertAction){
-        if let url = URL(string: "https://www.guessbuzz.in/privacy.html") {
+        if let url = URL(string: "https://guessbuzz.in/privacy.html") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("privacy", parameters: [:])
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    @objc func willEnterForeground() {
+        if self.isViewLoaded && (self.view.window != nil) {
+            self.loadMatch()
+        }
+    }
+    
+    func loadMatch() {
         if (Auth.auth().currentUser != nil) {
             self.getFirebaseAccessToken()
             self.signInButton.isHidden = true
@@ -77,8 +87,8 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        
+    override func viewWillAppear(_ animated: Bool) {
+        self.loadMatch()
     }
 
     
@@ -115,6 +125,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
+                WhistlerManager.sharedInstance.happeningMatchs.removeAll()
                 for schedule in response.schedules! {
                     WhistlerManager.sharedInstance.happeningMatchs.append(schedule)
                 }
@@ -167,6 +178,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 self.errorObtainingFirebaseAccessToken(error: error)
                 return;
             }
+            self.loadingNotification?.hide(animated: true)
             if self.justSignedIn {
                 self.doUserInitStuff(name: currentUser!.displayName!, accessToken: idToken!)
             } else {
@@ -195,7 +207,11 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         //TODO
     }
     
+    var loadingNotification: MBProgressHUD?
     func gotCredentials(credentials: AuthCredential) {
+        loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification?.mode = MBProgressHUDMode.indeterminate
+        loadingNotification?.label.text = "Loading"
         Auth.auth().signIn(with: credentials) { (user, error) in
             if let error = error {
                 self.errorInGoogleSignIn(error: error)
