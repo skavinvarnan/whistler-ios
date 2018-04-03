@@ -12,7 +12,7 @@ import MBProgressHUD
 import Firebase
 import GoogleMobileAds
 
-class UserPredictionReportLastViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UserPredictionReportLastViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
 
     var uid: String?
     var matchKey: String?
@@ -27,6 +27,7 @@ class UserPredictionReportLastViewController: UIViewController, UITableViewDeleg
         self.title = passingTitle!
         self.getUserPredictionForMatch();
         self.loadAd()
+        bannerView.delegate = self
         var headerFrame: CGRect? = tableView.tableHeaderView?.frame
         headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
         tableView.tableHeaderView?.frame = headerFrame!
@@ -89,5 +90,44 @@ class UserPredictionReportLastViewController: UIViewController, UITableViewDeleg
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("adViewDidReceiveAd")
+        Analytics.logEvent("adViewDidReceiveAd", parameters: [ "screen": "PredictionReportLast" ])
+    }
+    
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError")
+        Analytics.logEvent("adView:didFailToReceiveAdWithError", parameters: [ "screen": "PredictionReportLast", "error": "error.localizedDescription" ])
+    }
+    
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+        Analytics.logEvent("adViewWillPresentScreen", parameters: [ "screen": "PredictionReportLast" ])
+    }
+    
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+        Analytics.logEvent("adViewWillDismissScreen", parameters: [ "screen": "PredictionReportLast" ])
+    }
+    
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+        Analytics.logEvent("adViewDidDismissScreen", parameters: [ "screen": "PredictionReportLast" ])
+    }
+    
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+        Analytics.logEvent("adViewWillLeaveApplication", parameters: [ "screen": "PredictionReportLast" ])
     }
 }

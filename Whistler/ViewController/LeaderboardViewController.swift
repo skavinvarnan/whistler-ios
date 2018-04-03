@@ -11,12 +11,11 @@ import Firebase
 import GoogleMobileAds
 import TRON
 
-class LeaderboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LeaderboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    var firstLoad = true
     
     var items:[LeaderBoardItem] = [];
     
@@ -31,6 +30,7 @@ class LeaderboardViewController: UIViewController, UITableViewDelegate, UITableV
         refresher.addTarget(self, action: #selector(fetchDataFromServer), for: UIControlEvents.valueChanged)
         tableView.addSubview(refresher)
         self.fetchDataFromServer()
+        bannerView.delegate = self
         self.loadAd()
         self.navigationItem.title = "Top 50 for \(WhistlerManager.sharedInstance.currentMatch!.shortName)"
     }
@@ -44,14 +44,20 @@ class LeaderboardViewController: UIViewController, UITableViewDelegate, UITableV
         bannerView.load(request)
     }
     
+    var firstLoad = true
     @objc func fetchDataFromServer() {
-       
+        if firstLoad {
+            refresher.beginRefreshing()
+        }
         let request: APIRequest<LeaderboardResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/match/leader_board/\(WhistlerManager.sharedInstance.currentMatch!.key)");
         request.perform(withSuccess: { (response) in
+            if self.firstLoad {
+                self.refresher.endRefreshing()
+                self.firstLoad = false
+            }
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
-                self.firstLoad = false
                 self.items = response.items!
                 self.tableView.reloadData()
                 self.refresher.endRefreshing()
@@ -99,6 +105,49 @@ class LeaderboardViewController: UIViewController, UITableViewDelegate, UITableV
             self.tableView.separatorStyle = .none
         }
         return numOfSection
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("adViewDidReceiveAd")
+        Analytics.logEvent("adViewDidReceiveAd", parameters: [ "screen": "Leaderboard" ])
+    }
+    
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError")
+        Analytics.logEvent("adView:didFailToReceiveAdWithError", parameters: [ "screen": "Leaderboard", "error": "error.localizedDescription" ])
+    }
+    
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+        Analytics.logEvent("adViewWillPresentScreen", parameters: [ "screen": "Leaderboard" ])
+    }
+    
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+        Analytics.logEvent("adViewWillDismissScreen", parameters: [ "screen": "Leaderboard" ])
+    }
+    
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+        Analytics.logEvent("adViewDidDismissScreen", parameters: [ "screen": "Leaderboard" ])
+    }
+    
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+        Analytics.logEvent("adViewWillLeaveApplication", parameters: [ "screen": "Leaderboard" ])
     }
 
 }

@@ -28,6 +28,22 @@ class SettingsViewController: UIViewController {
     }
     
     
+    @IBAction func rulesClicked(_ sender: UIButton) {
+        if let url = URL(string: "https://www.guessbuzz.in/rules.html") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("rules_settings", parameters: [:])
+        }
+        
+    }
+    
+    @IBAction func faqClicked(_ sender: UIButton) {
+        if let url = URL(string: "https://www.guessbuzz.in/faq.html") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            Analytics.logEvent("faq_settings", parameters: [:])
+        }
+     
+    }
+    
     @IBAction func privacyClicked(_ sender: UIButton) {
         if let url = URL(string: "https://www.guessbuzz.in/privacy.html") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)

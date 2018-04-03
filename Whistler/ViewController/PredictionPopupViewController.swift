@@ -79,10 +79,10 @@ class PredictionPopupViewController: UIViewController {
     
     func errorSavingPrediction(error: ErrorModel) {
         if error.code == 401 {
-            let alertController = Utils.simpleAlertController(title: "Oops", message: "Sorry!!.. This over has started, so predict the next one");
+            let alertController = Utils.simpleAlertController(title: "Oops!", message: "Sorry!!.. This over has started, so predict the next one");
             self.present(alertController, animated: true, completion: nil)
         } else {
-            let alertController = Utils.simpleAlertController(title: "error", message: "more disctiptive mesaage needed");
+            let alertController = Utils.simpleAlertController(title: "Error", message: "Something went wrong. Please try again.");
             self.present(alertController, animated: true, completion: nil)
         }
     }

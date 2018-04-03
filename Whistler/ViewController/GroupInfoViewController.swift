@@ -153,7 +153,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func shareJoinCode(_ sender: UIButton) {
         Analytics.logEvent("invite_friends", parameters: [:])
-        let text = "Group id: \(groupObject.groupId.uppercased()) Join code: \(groupObject.joinCode)"
+        let text = "Because Guessing Is Fun! Join \(Auth.auth().currentUser!.displayName!)'s group @GUESSBUZZ and Predict Scores for T20 Cricket Matches this SUMMER. Win Exciting Prizes. \n\nGroup ID: \(groupObject.groupId.uppercased()) \nJoin code: \(groupObject.joinCode)  \n\nDownload the app now at https://guessbuzz.in"
         let textToShare = [ text ]
         let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view
@@ -162,7 +162,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func leaveGroup() {
-        let refreshAlert = UIAlertController(title: "Leave group?", message: "Are you sure you want to leave this group?", preferredStyle: UIAlertControllerStyle.alert)
+        let refreshAlert = UIAlertController(title: "Leave group", message: "Are you sure you want to leave this group?", preferredStyle: UIAlertControllerStyle.alert)
         refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
             self.leaveGroupMethod()
         }))
@@ -171,7 +171,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func deleteGroup() {
-        let refreshAlert = UIAlertController(title: "Delete group?", message: "Are you sure you want to delete this group?", preferredStyle: UIAlertControllerStyle.alert)
+        let refreshAlert = UIAlertController(title: "Delete group", message: "Are you sure you want to delete this group?. All the members of the group will be removed. Think Twice", preferredStyle: UIAlertControllerStyle.alert)
         refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
             self.deleteGroupMethod()
         }))
@@ -225,7 +225,7 @@ class GroupInfoViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func editGroup() {
-        let alert = UIAlertController(title: "Edit group", message: "Change your group name", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Edit group", message: "Please enter the new group name", preferredStyle: UIAlertControllerStyle.alert)
         alert.addTextField(configurationHandler: configurationTextField)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:nil))
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:{ (UIAlertAction) in

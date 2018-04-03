@@ -46,10 +46,10 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
     }
     
     @objc func userDidTapLabel(tapGestureRecognizer: UITapGestureRecognizer) {
-        let otherAlert = UIAlertController(title: "Which one?", message: "Which one would you like to read", preferredStyle: UIAlertControllerStyle.alert)
+        let otherAlert = UIAlertController(title: "Select", message: "Which one would you like to read", preferredStyle: UIAlertControllerStyle.alert)
         
-        let callFunction = UIAlertAction(title: "Terms", style: UIAlertActionStyle.default, handler: openTerms)
-        let dismiss = UIAlertAction(title: "Privacy", style: UIAlertActionStyle.default, handler: openPrivacy)
+        let callFunction = UIAlertAction(title: "Terms of Service", style: UIAlertActionStyle.default, handler: openTerms)
+        let dismiss = UIAlertAction(title: "Privacy Policy", style: UIAlertActionStyle.default, handler: openPrivacy)
         otherAlert.addAction(dismiss)
         otherAlert.addAction(callFunction)
         
@@ -152,7 +152,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                     WhistlerManager.sharedInstance.happeningMatchs.append(schedule)
                 }
                 if WhistlerManager.sharedInstance.happeningMatchs.count == 0 {
-                    let alertController = UIAlertController(title: "No matches", message: "No live matches come again later", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "Oops!!", message: "No live matches now", preferredStyle: .alert)
                     let actionOk = UIAlertAction(title: "OK", style: .default, handler: {(action:UIAlertAction!) in
                         self.dismiss(animated: true, completion: nil)
                     })
@@ -180,21 +180,20 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
             }
             self.loadingNotification?.hide(animated: true)
             if self.justSignedIn {
-                self.doUserInitStuff(name: currentUser!.displayName!, accessToken: idToken!)
+                self.doUserInitStuff(name: currentUser!.displayName!, accessToken: idToken!, email: currentUser!.email!)
             } else {
                 self.obtainedFirebaseAccessToken(accessToken: idToken!)
             }
         }
     }
     
-    func doUserInitStuff(name: String, accessToken: String) {
+    func doUserInitStuff(name: String, accessToken: String, email: String) {
         UserDefaults.standard.set(accessToken, forKey: Constants.UserDefaults.ACCESS_TOKEN)
-        let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/user/init/\(name)");
+        let request: APIRequest<GenericResponse, ServerError> = TronService.sharedInstance.createRequest(path: "/user/init/\(name)/\(email)");
         request.perform(withSuccess: { (response) in
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
-                print("User init success")
                 self.obtainedFirebaseAccessToken(accessToken: accessToken)
             }
         }) { (error) in

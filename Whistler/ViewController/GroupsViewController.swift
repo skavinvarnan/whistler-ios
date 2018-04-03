@@ -12,12 +12,12 @@ import TRON
 import MBProgressHUD
 import GoogleMobileAds
 
-class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    var firstLoad = true
+    
     
     var groups:[GroupModel] = [];
     var refresher: UIRefreshControl!
@@ -33,6 +33,7 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         refresher.addTarget(self, action: #selector(populate), for: UIControlEvents.valueChanged)
         tableView.addSubview(refresher)
         self.fetchGroupsFromServer();
+        bannerView.delegate = self
         self.loadAd()
         
     }
@@ -46,20 +47,21 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         bannerView.load(request)
     }
     
+
+    var firstLoad = true
     func fetchGroupsFromServer() {
-        //let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
         if firstLoad {
-          //  loadingNotification.mode = MBProgressHUDMode.indeterminate
-            //loadingNotification.label.text = "Loading"
+            refresher.beginRefreshing()
         }
         let request: APIRequest<GroupList, ServerError> = TronService.sharedInstance.createRequest(path: "/group/list_all_groups");
         request.perform(withSuccess: { (response) in
+            if self.firstLoad {
+                self.refresher.endRefreshing()
+                self.firstLoad = false
+            }
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
-                if self.firstLoad {
-                    //loadingNotification.hide(animated: true)
-                }
                 self.firstLoad = false
                 self.groups = response.groups!
                 self.tableView.reloadData()
@@ -107,7 +109,7 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
             if !firstLoad {
-                noDataLabel.text = "You dont have any groups. \nClick the + icon to add a new group"
+                noDataLabel.text = "You are not part of any Group. \nClick the + icon to add a new group"
             }
             noDataLabel.numberOfLines = 2;
             noDataLabel.textColor = UIColor(red: 22.0/255.0, green: 106.0/255.0, blue: 176.0/255.0, alpha: 1.0)
@@ -143,5 +145,44 @@ class GroupsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("adViewDidReceiveAd")
+        Analytics.logEvent("adViewDidReceiveAd", parameters: [ "screen": "Groups" ])
+    }
+    
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError")
+        Analytics.logEvent("adView:didFailToReceiveAdWithError", parameters: [ "screen": "Groups", "error": "error.localizedDescription" ])
+    }
+    
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+        Analytics.logEvent("adViewWillPresentScreen", parameters: [ "screen": "Groups" ])
+    }
+    
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+        Analytics.logEvent("adViewWillDismissScreen", parameters: [ "screen": "Groups" ])
+    }
+    
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+        Analytics.logEvent("adViewDidDismissScreen", parameters: [ "screen": "Groups" ])
+    }
+    
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+        Analytics.logEvent("adViewWillLeaveApplication", parameters: [ "screen": "Groups" ])
     }
 }

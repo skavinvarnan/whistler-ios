@@ -15,22 +15,35 @@ class ScheduleViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     
     var schedule:[Schedule] = [];
+    var refresher: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        refresher = UIRefreshControl()
+        refresher.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refresher.addTarget(self, action: #selector(fetchScheduleFromServer), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refresher)
         self.fetchScheduleFromServer();
     }
-    
-    func fetchScheduleFromServer() {
+    var firstLoad = true
+    @objc func fetchScheduleFromServer() {
+        if firstLoad {
+            refresher.beginRefreshing()
+        }
         let request: APIRequest<ScheduleList, ServerError> = TronService.sharedInstance.createRequest(path: "/match/schedule");
         request.perform(withSuccess: { (response) in
+            if self.firstLoad {
+                self.refresher.endRefreshing()
+                self.firstLoad = false
+            }
             if let err = response.error {
                 self.errorApiCall(error: err)
             } else {
                 self.schedule = response.schedules!;
                 self.tableView.reloadData()
+                self.refresher.endRefreshing()
             }
         }) { (error) in
             let alertController = Utils.simpleAlertController(title: "No connection", message: "Unable to connect with to the internet. Please check your network settings");
@@ -69,4 +82,6 @@ class ScheduleViewController: UIViewController, UITableViewDelegate, UITableView
         cell.teamBImage.image = UIImage(named: sc.teamB.uppercased());
         return cell;
     }
+    
+    
 }

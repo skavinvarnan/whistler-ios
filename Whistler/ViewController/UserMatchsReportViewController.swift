@@ -12,7 +12,7 @@ import MBProgressHUD
 import Firebase
 import GoogleMobileAds
 
-class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GADBannerViewDelegate {
     
     var uid: String?
     var matchKey: String?
@@ -27,6 +27,7 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
         tableView.dataSource = self
         self.title = "All Matches"
         self.getUserMatchesReport();
+        bannerView.delegate = self
         self.loadAd()
         var headerFrame: CGRect? = tableView.tableHeaderView?.frame
         headerFrame?.size.height = (tableView.tableHeaderView?.frame.height)! / 2
@@ -119,5 +120,44 @@ class UserMatchsReportViewController: UIViewController, UITableViewDelegate, UIT
         // Pass the selected object to the new view controller.
     }
     */
+    
+    /// Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("adViewDidReceiveAd")
+        Analytics.logEvent("adViewDidReceiveAd", parameters: [ "screen": "MatchReport" ])
+    }
+    
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+                didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError")
+        Analytics.logEvent("adView:didFailToReceiveAdWithError", parameters: [ "screen": "MatchReport", "error": "error.localizedDescription" ])
+    }
+    
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+        Analytics.logEvent("adViewWillPresentScreen", parameters: [ "screen": "MatchReport" ])
+    }
+    
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+        Analytics.logEvent("adViewWillDismissScreen", parameters: [ "screen": "MatchReport" ])
+    }
+    
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+        Analytics.logEvent("adViewDidDismissScreen", parameters: [ "screen": "MatchReport" ])
+    }
+    
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+        Analytics.logEvent("adViewWillLeaveApplication", parameters: [ "screen": "MatchReport" ])
+    }
 
 }
