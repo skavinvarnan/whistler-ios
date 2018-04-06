@@ -164,9 +164,11 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.refresher.endRefreshing()
             if let err = response.error {
                 self.errorFetchingPointsTable(error: err)
+                Analytics.logEvent("fetch_prediction_table_error", parameters: [:])
             } else {
                 self.populate(predictTableData: response.pointsTableData!)
                 self.tableView.reloadData()
+                Analytics.logEvent("fetch_prediction_table", parameters: [:])
             }
         }) { (error) in
             self.errorFetchingPointsTable(error: ErrorModel(code: 123, message: "Guessing no internet"))
@@ -190,9 +192,11 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let err = response.error {
                 self.errorFetchingScoreCard(error: err)
                 self.hideProgressBar()
+                Analytics.logEvent("fetch_scorecard_error", parameters: [:])
             } else {
                 self.populate(scoreBoard: response.scoreBoard!)
                 self.hideProgressBar()
+                Analytics.logEvent("fetch_scorecard", parameters: [:])
             }
         }) { (error) in
             self.errorFetchingScoreCard(error: ErrorModel(code: 123, message: "Guessing no internet"))
@@ -257,6 +261,19 @@ class LiveViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.fetchScoreBoardFromServer()
         self.fetchPredictPointsTableData()
         self.startScoreCardTimer()
+        
+        if(Auth.auth().currentUser != nil) {
+            print("Refreshing accesstoken started")
+            let currentUser = Auth.auth().currentUser
+            currentUser?.getIDTokenForcingRefresh(true) { idToken, error in
+                if error != nil {
+                    return;
+                }
+                UserDefaults.standard.set(idToken!, forKey: Constants.UserDefaults.ACCESS_TOKEN)
+                Analytics.logEvent("refresh_access_token", parameters: [:])
+                print("Access token refreshed")
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

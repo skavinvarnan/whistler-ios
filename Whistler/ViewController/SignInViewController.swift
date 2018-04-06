@@ -18,7 +18,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
     @IBOutlet weak var signInButton: GIDSignInButton!
     @IBOutlet weak var termsConditionLabel: UILabel!
     @IBOutlet weak var imageViewCricket: UIImageView!
-    var justSignedIn = false
+    var justSignedIn = true
     
     override func viewDidLoad() {
         super.viewDidLoad()

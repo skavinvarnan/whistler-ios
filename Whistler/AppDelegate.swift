@@ -91,6 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                     return;
                 }
                 UserDefaults.standard.set(idToken!, forKey: Constants.UserDefaults.ACCESS_TOKEN)
+                Analytics.logEvent("refresh_access_token", parameters: [:])
                 print("Access token refreshed")
             }
         }
